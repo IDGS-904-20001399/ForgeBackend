@@ -1,0 +1,12 @@
+C:\Users\Kasparov\Desktop\dev\univ\Forge\Forge.Contracts\bin\Debug\net7.0\Forge.Contracts.deps.json
+C:\Users\Kasparov\Desktop\dev\univ\Forge\Forge.Contracts\bin\Debug\net7.0\Forge.Contracts.dll
+C:\Users\Kasparov\Desktop\dev\univ\Forge\Forge.Contracts\bin\Debug\net7.0\Forge.Contracts.pdb
+C:\Users\Kasparov\Desktop\dev\univ\Forge\Forge.Contracts\obj\Debug\net7.0\Forge.Contracts.csproj.AssemblyReference.cache
+C:\Users\Kasparov\Desktop\dev\univ\Forge\Forge.Contracts\obj\Debug\net7.0\Forge.Contracts.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Kasparov\Desktop\dev\univ\Forge\Forge.Contracts\obj\Debug\net7.0\Forge.Contracts.AssemblyInfoInputs.cache
+C:\Users\Kasparov\Desktop\dev\univ\Forge\Forge.Contracts\obj\Debug\net7.0\Forge.Contracts.AssemblyInfo.cs
+C:\Users\Kasparov\Desktop\dev\univ\Forge\Forge.Contracts\obj\Debug\net7.0\Forge.Contracts.csproj.CoreCompileInputs.cache
+C:\Users\Kasparov\Desktop\dev\univ\Forge\Forge.Contracts\obj\Debug\net7.0\Forge.Contracts.dll
+C:\Users\Kasparov\Desktop\dev\univ\Forge\Forge.Contracts\obj\Debug\net7.0\refint\Forge.Contracts.dll
+C:\Users\Kasparov\Desktop\dev\univ\Forge\Forge.Contracts\obj\Debug\net7.0\Forge.Contracts.pdb
+C:\Users\Kasparov\Desktop\dev\univ\Forge\Forge.Contracts\obj\Debug\net7.0\ref\Forge.Contracts.dll

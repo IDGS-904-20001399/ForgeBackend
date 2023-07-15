@@ -1,0 +1,15 @@
+@id = e35daaba-5a9e-43a2-9305-3dead8296fe0
+@name = "Producto de prueba"
+@description = "Descripción de prueba"
+@category = "Categoria de prueba"
+@price = 19.99
+
+PUT http://localhost:5088/api/products/{{id}}
+Content-Type: application/json
+
+{
+    "name": {{name}},
+    "description": {{description}},
+    "category": {{category}},
+    "price": {{price}}
+}

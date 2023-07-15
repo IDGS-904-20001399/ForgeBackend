@@ -1,0 +1,14 @@
+@name = "Producto de prueba"
+@description = "Descripción de prueba"
+@category = "Categoria de prueba"
+@price = 19.99
+
+POST  http://localhost:5088/api/products
+Content-Type: application/json
+
+{
+    "name": {{name}},
+    "description": {{description}},
+    "category": {{category}},
+    "price": {{price}}
+}
