@@ -1,4 +1,5 @@
 ﻿using Forge.Contracts.Products;
+using Forge.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -8,10 +9,28 @@ namespace Forge.Controllers
     [ApiController]
     public class ProductsController : ControllerBase
     {
-        [HttpPost()]
+        [HttpPost]
         public IActionResult CreateProduct(CreateProductRequest request)
         {
-            return Ok(request);
+            var product = new Product(
+                Guid.NewGuid(),
+                request.Name,
+                request.Description,
+                request.Category,
+                request.Price
+            );
+            // TODO: Save to database
+
+            var response = new CreateProductRequest(
+                product.Name,
+                product.Description,
+                product.Category,
+                product.Price
+            );
+            return CreatedAtAction(
+                actionName: nameof(GetProduct),
+                routeValues: new {id = product.Id},
+                value: response);
         }
 
         [HttpGet("{id:guid}")]
