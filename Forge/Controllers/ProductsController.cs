@@ -1,5 +1,6 @@
 ﻿using Forge.Contracts.Products;
 using Forge.Models;
+using Forge.Services.Products;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,6 +10,13 @@ namespace Forge.Controllers
     [ApiController]
     public class ProductsController : ControllerBase
     {
+        private readonly IProductService _productService;
+
+        public ProductsController(IProductService productService)
+        {
+            _productService = productService;
+        }
+
         [HttpPost]
         public IActionResult CreateProduct(CreateProductRequest request)
         {
@@ -20,8 +28,10 @@ namespace Forge.Controllers
                 request.Price
             );
             // TODO: Save to database
+            _productService.CreateProduct(product);
 
-            var response = new CreateProductRequest(
+            var response = new ProductResponse(
+                product.Id,
                 product.Name,
                 product.Description,
                 product.Category,
@@ -36,7 +46,15 @@ namespace Forge.Controllers
         [HttpGet("{id:guid}")]
         public IActionResult GetProduct(Guid id)
         {
-            return Ok(id);
+            Product product = _productService.GetProduct(id);
+            var response = new ProductResponse(
+                product.Id,
+                product.Name,
+                product.Description,
+                product.Category,
+                product.Price
+            );
+            return Ok(response);
         }
 
         [HttpPut("{id:guid}")]
