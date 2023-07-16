@@ -1,14 +1,15 @@
-﻿using Forge.Contracts.Products;
+﻿using ErrorOr;
+using Forge.Contracts.Products;
 using Forge.Models;
+using Forge.ServiceErrors;
 using Forge.Services.Products;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Forge.Controllers
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class ProductsController : ControllerBase
+    public class ProductsController : ApiController
     {
         private readonly IProductService _productService;
 
@@ -27,35 +28,26 @@ namespace Forge.Controllers
                 request.Category,
                 request.Price
             );
-            // TODO: Save to database
-            _productService.CreateProduct(product);
+            ErrorOr<ErrorOr.Created> createProductResult = _productService.CreateProduct(product);
 
-            var response = new ProductResponse(
-                product.Id,
-                product.Name,
-                product.Description,
-                product.Category,
-                product.Price
+            return createProductResult.Match(
+                created => CreatedAtGetProduct(product),
+                errors => Problem(errors)
             );
-            return CreatedAtAction(
-                actionName: nameof(GetProduct),
-                routeValues: new {id = product.Id},
-                value: response);
+
         }
+
 
         [HttpGet("{id:guid}")]
         public IActionResult GetProduct(Guid id)
         {
-            Product product = _productService.GetProduct(id);
-            var response = new ProductResponse(
-                product.Id,
-                product.Name,
-                product.Description,
-                product.Category,
-                product.Price
+            ErrorOr<Product> getProductResult = _productService.GetProduct(id);
+            return getProductResult.Match(
+                Product => Ok(MapProductResponse(Product)),
+                errors => Problem(errors)
             );
-            return Ok(response);
         }
+
 
         [HttpPut("{id:guid}")]
         public IActionResult UpsertProduct(Guid id, UpsertProductRequest request)
@@ -68,16 +60,42 @@ namespace Forge.Controllers
                 request.Price
             );
 
-            _productService.UpsertProduct(product);
+            ErrorOr<UpsertedProduct> upserteProductResult = _productService.UpsertProduct(product);
+
             // TODO: Return 201 if new product was created
-            return NoContent();
+            return upserteProductResult.Match(
+                upserted => upserted.isNewlyCreated ? CreatedAtGetProduct(product) : NoContent(),
+                errors => Problem(errors)
+            );
         }
 
         [HttpDelete("{id:guid}")]
         public IActionResult DeleteProduct(Guid id)
         {
-            _productService.DeleteProduct(id);
-            return NoContent();
+            ErrorOr<Deleted> deleteProductResult = _productService.DeleteProduct(id);
+            return deleteProductResult.Match(
+                deleted => NoContent(),
+                errors => Problem(errors)
+            );
+        }
+
+        private static ProductResponse MapProductResponse(Product product)
+        {
+            return new ProductResponse(
+                product.Id,
+                product.Name,
+                product.Description,
+                product.Category,
+                product.Price
+            );
+        }
+        private IActionResult CreatedAtGetProduct(Product product)
+        {
+            return CreatedAtAction(
+                actionName: nameof(GetProduct),
+                routeValues: new { id = product.Id },
+                value: MapProductResponse(product));
         }
     }
+
 }

@@ -30,3 +30,4 @@ C:\Users\Kasparov\Desktop\dev\univ\Forge\Forge\obj\Debug\net7.0\refint\Forge.dll
 C:\Users\Kasparov\Desktop\dev\univ\Forge\Forge\obj\Debug\net7.0\Forge.pdb
 C:\Users\Kasparov\Desktop\dev\univ\Forge\Forge\obj\Debug\net7.0\Forge.genruntimeconfig.cache
 C:\Users\Kasparov\Desktop\dev\univ\Forge\Forge\obj\Debug\net7.0\ref\Forge.dll
+C:\Users\Kasparov\Desktop\dev\univ\Forge\Forge\bin\Debug\net7.0\ErrorOr.dll
