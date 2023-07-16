@@ -30,7 +30,7 @@ namespace Forge.Services.Products
 
         public ErrorOr<UpsertedProduct> UpsertProduct(Product product)
         {
-            var isNewlyCreated = _products.ContainsKey(product.Id);
+            bool isNewlyCreated = !_products.ContainsKey(product.Id);
             _products[product.Id] = product;
             return new UpsertedProduct(isNewlyCreated);
         }
