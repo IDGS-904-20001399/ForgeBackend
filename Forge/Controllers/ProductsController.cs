@@ -60,13 +60,24 @@ namespace Forge.Controllers
         [HttpPut("{id:guid}")]
         public IActionResult UpsertProduct(Guid id, UpsertProductRequest request)
         {
-            return Ok(request);
+            var product = new Product(
+                id,
+                request.Name,
+                request.Description,
+                request.Category,
+                request.Price
+            );
+
+            _productService.UpsertProduct(product);
+            // TODO: Return 201 if new product was created
+            return NoContent();
         }
 
         [HttpDelete("{id:guid}")]
         public IActionResult DeleteProduct(Guid id)
         {
-            return Ok(id);
+            _productService.DeleteProduct(id);
+            return NoContent();
         }
     }
 }
