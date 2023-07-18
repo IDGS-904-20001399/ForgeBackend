@@ -21,13 +21,14 @@ namespace Forge.Controllers
         [HttpPost]
         public IActionResult CreateProduct(CreateProductRequest request)
         {
-            var product = new Product(
-                Guid.NewGuid(),
-                request.Name,
-                request.Description,
-                request.Category,
-                request.Price
-            );
+            ErrorOr<Product> requestToProductResult = Product.From(request);
+
+            if (requestToProductResult.IsError)
+            {
+                return Problem(requestToProductResult.Errors);
+            }
+
+            var product = requestToProductResult.Value;
             ErrorOr<ErrorOr.Created> createProductResult = _productService.CreateProduct(product);
 
             return createProductResult.Match(
@@ -52,17 +53,16 @@ namespace Forge.Controllers
         [HttpPut("{id:guid}")]
         public IActionResult UpsertProduct(Guid id, UpsertProductRequest request)
         {
-            var product = new Product(
-                id,
-                request.Name,
-                request.Description,
-                request.Category,
-                request.Price
-            );
+            ErrorOr<Product> requestToProductResult =  Product.From(id, request);
+
+            if (requestToProductResult.IsError){
+                return Problem(requestToProductResult.Errors);
+            }
+
+            var product = requestToProductResult.Value;
 
             ErrorOr<UpsertedProduct> upserteProductResult = _productService.UpsertProduct(product);
 
-            // TODO: Return 201 if new product was created
             return upserteProductResult.Match(
                 upserted => upserted.isNewlyCreated ? CreatedAtGetProduct(product) : NoContent(),
                 errors => Problem(errors)

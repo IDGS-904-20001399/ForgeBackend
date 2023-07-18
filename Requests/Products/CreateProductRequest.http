@@ -1,7 +1,7 @@
-@name = "Producto de prueba"
+@name = "Prueba producto"
 @description = "Descripción de prueba"
 @category = "Categoria de prueba"
-@price = 19.99
+@price = 10.99
 
 POST  http://localhost:5088/api/products
 Content-Type: application/json
