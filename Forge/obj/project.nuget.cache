@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "fsatBWiU/aAA/ru1A3ScvcDJfYjrVjfDLOV1Q6IDTpGEeaoVgBRUY2BfzUBQRPCuWvFFia3MV+IO+qAu7NG1Qw==",
+  "dgSpecHash": "iPnBib/kJFdewtne5+H2z9XvOmqf3XoqYvdTPhuwiRmtoNc0yThXPemrHtEdJL/7KSTr1Ob/b3OIWr+5MOCi0w==",
   "success": true,
-  "projectFilePath": "c:\\Users\\Kasparov\\Desktop\\dev\\univ\\Forge\\Forge\\Forge.csproj",
+  "projectFilePath": "C:\\Users\\Kasparov\\Desktop\\dev\\univ\\Forge\\Forge\\Forge.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Kasparov\\.nuget\\packages\\erroror\\1.2.1\\erroror.1.2.1.nupkg.sha512",
     "C:\\Users\\Kasparov\\.nuget\\packages\\humanizer.core\\2.14.1\\humanizer.core.2.14.1.nupkg.sha512",
