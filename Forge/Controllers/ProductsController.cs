@@ -39,8 +39,8 @@ namespace Forge.Controllers
         }
 
 
-        [HttpGet("{id:guid}")]
-        public IActionResult GetProduct(Guid id)
+        [HttpGet("{id:int}")]
+        public IActionResult GetProduct(int id)
         {
             ErrorOr<Product> getProductResult = _productService.GetProduct(id);
             return getProductResult.Match(
@@ -49,9 +49,19 @@ namespace Forge.Controllers
             );
         }
 
+        [HttpGet()]
+        public IActionResult GetProducts()
+        {
+            ErrorOr<List<Product>> getProductResult = _productService.GetProducts();
+            return getProductResult.Match(
+                Products => Ok(MapProductResponses(Products)),
+                errors => Problem(errors)
+            );
+        }
 
-        [HttpPut("{id:guid}")]
-        public IActionResult UpsertProduct(Guid id, UpsertProductRequest request)
+
+        [HttpPut("{id:int}")]
+        public IActionResult UpsertProduct(int id, UpsertProductRequest request)
         {
             ErrorOr<Product> requestToProductResult =  Product.From(id, request);
 
@@ -69,14 +79,22 @@ namespace Forge.Controllers
             );
         }
 
-        [HttpDelete("{id:guid}")]
-        public IActionResult DeleteProduct(Guid id)
+        [HttpDelete("{id:int}")]
+        public IActionResult DeleteProduct(int id)
         {
             ErrorOr<Deleted> deleteProductResult = _productService.DeleteProduct(id);
             return deleteProductResult.Match(
                 deleted => NoContent(),
                 errors => Problem(errors)
             );
+        }
+
+        private static List<ProductResponse> MapProductResponses(List<Product> products){
+            List<ProductResponse> responses = new List<ProductResponse>();
+            foreach(var product in products){
+                responses.Add(MapProductResponse(product));
+            }
+            return responses;
         }
 
         private static ProductResponse MapProductResponse(Product product)
@@ -86,7 +104,8 @@ namespace Forge.Controllers
                 product.Name,
                 product.Description,
                 product.Category,
-                product.Price
+                product.Price,
+                product.Image
             );
         }
         private IActionResult CreatedAtGetProduct(Product product)

@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Kasparov\\Desktop\\dev\\univ\\Forge\\Forge\\Forge.csproj": {}
+    "c:\\Users\\Kasparov\\Desktop\\dev\\univ\\Forge\\Forge\\Forge.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Kasparov\\Desktop\\dev\\univ\\Forge\\Forge.Contracts\\Forge.Contracts.csproj": {
+    "c:\\Users\\Kasparov\\Desktop\\dev\\univ\\Forge\\Forge.Contracts\\Forge.Contracts.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Kasparov\\Desktop\\dev\\univ\\Forge\\Forge.Contracts\\Forge.Contracts.csproj",
+        "projectUniqueName": "c:\\Users\\Kasparov\\Desktop\\dev\\univ\\Forge\\Forge.Contracts\\Forge.Contracts.csproj",
         "projectName": "Forge.Contracts",
-        "projectPath": "C:\\Users\\Kasparov\\Desktop\\dev\\univ\\Forge\\Forge.Contracts\\Forge.Contracts.csproj",
+        "projectPath": "c:\\Users\\Kasparov\\Desktop\\dev\\univ\\Forge\\Forge.Contracts\\Forge.Contracts.csproj",
         "packagesPath": "C:\\Users\\Kasparov\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Kasparov\\Desktop\\dev\\univ\\Forge\\Forge.Contracts\\obj\\",
+        "outputPath": "c:\\Users\\Kasparov\\Desktop\\dev\\univ\\Forge\\Forge.Contracts\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -64,14 +64,14 @@
         }
       }
     },
-    "C:\\Users\\Kasparov\\Desktop\\dev\\univ\\Forge\\Forge\\Forge.csproj": {
+    "c:\\Users\\Kasparov\\Desktop\\dev\\univ\\Forge\\Forge\\Forge.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Kasparov\\Desktop\\dev\\univ\\Forge\\Forge\\Forge.csproj",
+        "projectUniqueName": "c:\\Users\\Kasparov\\Desktop\\dev\\univ\\Forge\\Forge\\Forge.csproj",
         "projectName": "Forge",
-        "projectPath": "C:\\Users\\Kasparov\\Desktop\\dev\\univ\\Forge\\Forge\\Forge.csproj",
+        "projectPath": "c:\\Users\\Kasparov\\Desktop\\dev\\univ\\Forge\\Forge\\Forge.csproj",
         "packagesPath": "C:\\Users\\Kasparov\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Kasparov\\Desktop\\dev\\univ\\Forge\\Forge\\obj\\",
+        "outputPath": "c:\\Users\\Kasparov\\Desktop\\dev\\univ\\Forge\\Forge\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -94,8 +94,8 @@
           "net7.0": {
             "targetAlias": "net7.0",
             "projectReferences": {
-              "C:\\Users\\Kasparov\\Desktop\\dev\\univ\\Forge\\Forge.Contracts\\Forge.Contracts.csproj": {
-                "projectPath": "C:\\Users\\Kasparov\\Desktop\\dev\\univ\\Forge\\Forge.Contracts\\Forge.Contracts.csproj"
+              "c:\\Users\\Kasparov\\Desktop\\dev\\univ\\Forge\\Forge.Contracts\\Forge.Contracts.csproj": {
+                "projectPath": "c:\\Users\\Kasparov\\Desktop\\dev\\univ\\Forge\\Forge.Contracts\\Forge.Contracts.csproj"
               }
             }
           }
@@ -110,6 +110,10 @@
         "net7.0": {
           "targetAlias": "net7.0",
           "dependencies": {
+            "Dapper": {
+              "target": "Package",
+              "version": "[2.0.143, )"
+            },
             "ErrorOr": {
               "target": "Package",
               "version": "[1.2.1, )"
@@ -118,19 +122,9 @@
               "target": "Package",
               "version": "[7.0.7, )"
             },
-            "Microsoft.EntityFrameworkCore": {
+            "MySql.Data": {
               "target": "Package",
-              "version": "[7.0.9, )"
-            },
-            "Microsoft.EntityFrameworkCore.Design": {
-              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
-              "suppressParent": "All",
-              "target": "Package",
-              "version": "[7.0.9, )"
-            },
-            "Microsoft.EntityFrameworkCore.Sqlite": {
-              "target": "Package",
-              "version": "[7.0.9, )"
+              "version": "[8.1.0, )"
             }
           },
           "imports": [
