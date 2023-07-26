@@ -7,46 +7,44 @@ namespace Forge.Models
     public class Product
     {
         public const int MinFieldLength = 3;
-        public const double MinPrice = 0.1; 
-        public int Id { get; set;}
-        public string Name { get; private set;}
+        public const double MinPrice = 0.1;
+        public Guid Id { get; private set; }
+        public string Name { get; private set; }
         public string Description { get; private set;}
-        public string Category { get; private set;}
+        public string Category { get; private set; }
         public double Price { get; private set;}
-        public string Image { get; private set;}
 
-        public Product(){}
-        private Product(
+        private Product() { }
+        private Product(Guid id,
                        string name,
                        string description,
                        string category,
-                       double price,
-                       string image)
+                       double price)
         {
+            Id = id;
             Name = name;
             Description = description;
             Category = category;
             Price = price;
-            Image = image;
         }
 
-        public static ErrorOr<Product> From(CreateProductRequest request){
+        public static ErrorOr<Product> From(CreateProductRequest request)
+        {
             return Create(
                 request.Name,
                 request.Description,
                 request.Category,
-                request.Price,
-                request.Image
+                request.Price
             );
         }
 
-        public static ErrorOr<Product> From(int id, UpsertProductRequest request){
+        public static ErrorOr<Product> From(Guid id, UpsertProductRequest request)
+        {
             return Create(
                 request.Name,
                 request.Description,
                 request.Category,
                 request.Price,
-                request.Image,
                 id
             );
         }
@@ -56,24 +54,26 @@ namespace Forge.Models
                        string description,
                        string category,
                        double price,
-                       string image,
-                        int? id = 0
+                        Guid? id = null
         )
         {
-            List<Error> errors = new ();
-            if (name.Length < MinFieldLength){
-                errors.Add (Errors.Product.InvalidName);
+            List<Error> errors = new();
+            if (name.Length < MinFieldLength)
+            {
+                errors.Add(Errors.Product.InvalidName);
             }
 
-            if (price < MinPrice){
+            if (price < MinPrice)
+            {
                 errors.Add(Errors.Product.InvalidPrice);
             }
 
-            if (errors.Count > 0){
+            if (errors.Count > 0)
+            {
                 return errors;
             }
 
-            return new Product(name, description, category, price, image){Id = id ?? 0};
+            return new Product(id ?? Guid.NewGuid(), name, description, category, price);
         }
 
     }

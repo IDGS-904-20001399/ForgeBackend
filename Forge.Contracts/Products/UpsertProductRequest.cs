@@ -10,7 +10,6 @@ namespace Forge.Contracts.Products
         string Name,
         string Description,
         string Category,
-        double Price,
-        string Image
+        double Price
         );
 }

@@ -7,10 +7,9 @@ using System.Threading.Tasks;
 namespace Forge.Contracts.Products
 {
     public record ProductResponse(
-        int Id,
+        Guid id,
         string Name,
         string Description,
         string Category,
-        double Price,
-        string image);
+        double Price);
 }

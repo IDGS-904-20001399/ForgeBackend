@@ -1,111 +1,69 @@
-using System.Data;
+
+using System.Data.Common;
 using ErrorOr;
 using Forge.Models;
+using Forge.Persistence;
 using Forge.ServiceErrors;
-using MySql.Data.MySqlClient;
-using Dapper;
-using System.Diagnostics;
+using Microsoft.EntityFrameworkCore;
 
 namespace Forge.Services.Products
 {
     public class ProductService : IProductService
     {
-        private readonly MySqlConnection _dbConnection;
+        private readonly ForgeDbContext _dbContext;
 
-        public ProductService(MySqlConnection dbConnection)
+        public ProductService(ForgeDbContext dbContext)
         {
-            _dbConnection = dbConnection;
+            _dbContext = dbContext;
         }
 
         public ErrorOr<Created> CreateProduct(Product product)
         {
-            try
-            {
-                string query = "CALL add_product(@Name, @Description, @Category, @Price, @Image)";
-                product.Id = _dbConnection.QueryFirstOrDefault<int>(query, product);
-            }
-            catch (Exception e)
-            {
-                Debug.WriteLine("--------------------------------ERROR-----------------------------------------");
-                Debug.WriteLine(e);
-            }
+            _dbContext.Add(product);
+            _dbContext.SaveChanges();
             return Result.Created;
         }
 
-        public ErrorOr<Deleted> DeleteProduct(int id)
+
+
+        public ErrorOr<Deleted> DeleteProduct(Guid id)
         {
-            try
+            var product = _dbContext.Products.Find(id);
+            if (product == null)
             {
-                string query = "DELETE FROM product WHERE id = @Id";
-                _dbConnection.Execute(query, new { Id = id });
+                return Errors.Product.NotFound;
             }
-            catch (Exception e)
-            {
-                Debug.WriteLine("--------------------------------ERROR-----------------------------------------");
-                Debug.WriteLine(e);
-            }
-            // _products.Remove(id);
+
+            _dbContext.Remove(product);
+            _dbContext.SaveChanges();
+
             return Result.Deleted;
         }
 
-        public ErrorOr<Product> GetProduct(int id)
+        public ErrorOr<Product> GetProduct(Guid id)
         {
-            try
+            if (_dbContext.Products.Find(id) is Product product)
             {
-                string query = "SELECT * FROM product WHERE id = @Id";
-                return _dbConnection.QueryFirstOrDefault<Product>(query, new { Id = id });
-            }
-            catch (Exception e)
-            {
-                Debug.WriteLine("--------------------------------ERROR-----------------------------------------");
-                Debug.WriteLine(e);
+                return product;
             }
             return Errors.Product.NotFound;
-        }
-
-        public ErrorOr<List<Product>> GetProducts()
-        {
-            try
-            {
-                string query = "SELECT * FROM product";
-                return _dbConnection.Query<Product>(query).ToList();
-            }
-            catch (Exception e)
-            {
-                Debug.WriteLine("--------------------------------ERROR-----------------------------------------");
-                Debug.WriteLine(e);
-            }
-            return Errors.Product.NotFound;
-
         }
 
         public ErrorOr<UpsertedProduct> UpsertProduct(Product product)
         {
-            bool isNewlyCreated = false;
-            try
-            {
-                var parameters = new DynamicParameters();
-                parameters.Add("Id", product.Id);
-                parameters.Add("Name", product.Name);
-                parameters.Add("Description", product.Description);
-                parameters.Add("Category", product.Category);
-                parameters.Add("Price", product.Price);
-                parameters.Add("Image", product.Image);
-                parameters.Add("is_inserted", dbType: DbType.Int32, direction: ParameterDirection.Output);
+            bool isNewlyCreated = !_dbContext.Products.Any(p => p.Id == product.Id);
 
-                // Execute the stored procedure using Dapper
-                _dbConnection.Execute("upsert_product", parameters, commandType: CommandType.StoredProcedure);
-                int isNewRecordCreated = parameters.Get<int>("is_inserted");
-                Debug.WriteLine("--------------------------------444-----------------------------------------");
-                Debug.WriteLine(isNewRecordCreated);
-
-                // Get the value of the output parameter to check if a new rec
-            }
-            catch (Exception e)
+            if (isNewlyCreated)
             {
-                Debug.WriteLine("--------------------------------ERROR-----------------------------------------");
-                Debug.WriteLine(e);
+                _dbContext.Add(product);
             }
+            else
+            {
+
+                _dbContext.Update(product);
+            }
+            _dbContext.SaveChanges();
+
             return new UpsertedProduct(isNewlyCreated);
         }
     }
