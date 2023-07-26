@@ -1,4 +1,4 @@
 
-@id = bcdfa1b7-e223-4808-9123-327e43b97f94
+@id = 10
 
 GET http://localhost:5088/api/products/{{id}}
