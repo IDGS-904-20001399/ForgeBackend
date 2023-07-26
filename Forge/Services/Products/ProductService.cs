@@ -85,21 +85,11 @@ namespace Forge.Services.Products
             try
             {
                 var parameters = new DynamicParameters();
-                parameters.Add("Id", product.Id);
-                parameters.Add("Name", product.Name);
-                parameters.Add("Description", product.Description);
-                parameters.Add("Category", product.Category);
-                parameters.Add("Price", product.Price);
-                parameters.Add("Image", product.Image);
+                parameters.AddDynamicParams(product);
                 parameters.Add("is_inserted", dbType: DbType.Int32, direction: ParameterDirection.Output);
 
-                // Execute the stored procedure using Dapper
-                _dbConnection.Execute("upsert_product", parameters, commandType: CommandType.StoredProcedure);
-                int isNewRecordCreated = parameters.Get<int>("is_inserted");
-                Debug.WriteLine("--------------------------------444-----------------------------------------");
-                Debug.WriteLine(isNewRecordCreated);
-
-                // Get the value of the output parameter to check if a new rec
+                _dbConnection.Execute("upsert_prodcut", parameters, commandType: CommandType.StoredProcedure);
+                isNewlyCreated = parameters.Get<int>("is_inserted") == 1;
             }
             catch (Exception e)
             {

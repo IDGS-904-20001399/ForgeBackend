@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "zwvrpU6RJEHZBI8kyrAJPxaDNu6nfrXOlP0CGyjC/8z83rOhlXs0lbJ0fTSiId9+OtcCcE1CXHK2vuthDScz8w==",
+  "dgSpecHash": "27jUhHEzc8mn4VEOh1P5Ochr55pJ82EbZKbqBHF+kEEsafvZyjwg3uJ8SxDvfh7FOSNuoh2/tVe/jCCkcrIZzA==",
   "success": true,
-  "projectFilePath": "c:\\Users\\Kasparov\\Desktop\\dev\\univ\\Forge\\Forge\\Forge.csproj",
+  "projectFilePath": "C:\\Users\\Kasparov\\Desktop\\dev\\univ\\Forge\\Forge\\Forge.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Kasparov\\.nuget\\packages\\dapper\\2.0.143\\dapper.2.0.143.nupkg.sha512",
     "C:\\Users\\Kasparov\\.nuget\\packages\\erroror\\1.2.1\\erroror.1.2.1.nupkg.sha512",
