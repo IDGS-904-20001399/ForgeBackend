@@ -1,4 +1,4 @@
 
-@id = c434e62d-9dec-458c-8fa4-2feff02b831c
+@id = 10
 
 DELETE  http://localhost:5088/api/products/{{id}}

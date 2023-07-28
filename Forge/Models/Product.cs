@@ -8,23 +8,26 @@ namespace Forge.Models
     {
         public const int MinFieldLength = 3;
         public const double MinPrice = 0.1; 
-        public Guid Id { get; }
-        public string Name { get; }
-        public string Description { get; }
-        public string Category { get; }
-        public double Price { get; }
+        public int Id { get; set;}
+        public string Name { get; private set;}
+        public string Description { get; private set;}
+        public string Category { get; private set;}
+        public double Price { get; private set;}
+        public string Image { get; private set;}
 
-        private Product(Guid id,
+        public Product(){}
+        private Product(
                        string name,
                        string description,
                        string category,
-                       double price)
+                       double price,
+                       string image)
         {
-            Id = id;
             Name = name;
             Description = description;
             Category = category;
             Price = price;
+            Image = image;
         }
 
         public static ErrorOr<Product> From(CreateProductRequest request){
@@ -32,16 +35,18 @@ namespace Forge.Models
                 request.Name,
                 request.Description,
                 request.Category,
-                request.Price
+                request.Price,
+                request.Image
             );
         }
 
-        public static ErrorOr<Product> From(Guid id, UpsertProductRequest request){
+        public static ErrorOr<Product> From(int id, UpsertProductRequest request){
             return Create(
                 request.Name,
                 request.Description,
                 request.Category,
                 request.Price,
+                request.Image,
                 id
             );
         }
@@ -51,7 +56,8 @@ namespace Forge.Models
                        string description,
                        string category,
                        double price,
-                        Guid? id = null
+                       string image,
+                        int? id = 0
         )
         {
             List<Error> errors = new ();
@@ -67,7 +73,7 @@ namespace Forge.Models
                 return errors;
             }
 
-            return new Product(id ?? Guid.NewGuid(), name, description, category, price);
+            return new Product(name, description, category, price, image){Id = id ?? 0};
         }
 
     }
