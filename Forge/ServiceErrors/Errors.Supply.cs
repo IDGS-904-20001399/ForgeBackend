@@ -4,20 +4,19 @@ namespace Forge.ServiceErrors
 {
     public static partial class Errors
     {
-        public static class Product{
-
+        public static class Supply{
             public static Error InvalidName => Error.Validation(
-                code: "Product.InvalidName",
+                code: "Supply.InvalidName",
                 description: $"The name of the product must be at least {Models.Product.MinFieldLength} characters long"
             );
 
             public static Error InvalidPrice => Error.Validation(
-                code: "Product.InvalidPrice",
+                code: "Supply.InvalidPrice",
                 description: $"The price must be greater or equal to {Models.Product.MinPrice}"
             );
             public static Error NotFound => Error.NotFound(
-                code: "Product.NotFound",
-                description: "Product not found"
+                code: "Supply.NotFound",
+                description: "Supply not found"
             );
         }
     }

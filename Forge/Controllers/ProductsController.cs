@@ -1,5 +1,6 @@
 ﻿using ErrorOr;
 using Forge.Contracts.Products;
+using Forge.Contracts.Supplies;
 using Forge.Models;
 using Forge.ServiceErrors;
 using Forge.Services.Products;

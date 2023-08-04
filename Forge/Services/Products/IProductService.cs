@@ -11,8 +11,5 @@ namespace Forge.Services.Products
         ErrorOr<Product> GetProduct(int id);
         ErrorOr<List<Product>> GetProducts();
         ErrorOr<UpsertedProduct> UpsertProduct(Product product);
-        // ProductResponse GetProduct(Guid id);
-        // ProductResponse UpdateProduct(Guid id, UpsertProductRequest request);
-        // ProductResponse DeleteProduct(Guid id);
     }
 }

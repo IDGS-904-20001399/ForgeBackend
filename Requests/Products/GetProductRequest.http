@@ -1,4 +1,4 @@
 
-@id = 10
+@id = 3 
 
 GET http://localhost:5088/api/products/{{id}}

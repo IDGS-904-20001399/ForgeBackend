@@ -1,11 +1,13 @@
 using System.Data;
 using Forge.Services.Products;
+using Forge.Services.Supplies;
 using MySql.Data.MySqlClient;
 
 var builder = WebApplication.CreateBuilder(args);
 {
     builder.Services.AddControllers();
     builder.Services.AddScoped<IProductService, ProductService>();
+    builder.Services.AddScoped<ISupplyService, SupplyService>();
     builder.Services.AddTransient<MySqlConnection>((sp) =>
         {
             var configuration = sp.GetRequiredService<IConfiguration>();
@@ -35,6 +37,7 @@ var app = builder.Build();
     //app.UseAuthorization();
 
     app.MapControllers();
+    Dapper.DefaultTypeMap.MatchNamesWithUnderscores = true;
 
     app.Run();
 }

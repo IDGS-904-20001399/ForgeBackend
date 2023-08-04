@@ -1924,11 +1924,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "c:\\Users\\Kasparov\\Desktop\\dev\\univ\\Forge\\Forge\\Forge.csproj",
+      "projectUniqueName": "C:\\Users\\Kasparov\\Desktop\\dev\\univ\\Forge\\Forge\\Forge.csproj",
       "projectName": "Forge",
-      "projectPath": "c:\\Users\\Kasparov\\Desktop\\dev\\univ\\Forge\\Forge\\Forge.csproj",
+      "projectPath": "C:\\Users\\Kasparov\\Desktop\\dev\\univ\\Forge\\Forge\\Forge.csproj",
       "packagesPath": "C:\\Users\\Kasparov\\.nuget\\packages\\",
-      "outputPath": "c:\\Users\\Kasparov\\Desktop\\dev\\univ\\Forge\\Forge\\obj\\",
+      "outputPath": "C:\\Users\\Kasparov\\Desktop\\dev\\univ\\Forge\\Forge\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -1951,8 +1951,8 @@
         "net7.0": {
           "targetAlias": "net7.0",
           "projectReferences": {
-            "c:\\Users\\Kasparov\\Desktop\\dev\\univ\\Forge\\Forge.Contracts\\Forge.Contracts.csproj": {
-              "projectPath": "c:\\Users\\Kasparov\\Desktop\\dev\\univ\\Forge\\Forge.Contracts\\Forge.Contracts.csproj"
+            "C:\\Users\\Kasparov\\Desktop\\dev\\univ\\Forge\\Forge.Contracts\\Forge.Contracts.csproj": {
+              "projectPath": "C:\\Users\\Kasparov\\Desktop\\dev\\univ\\Forge\\Forge.Contracts\\Forge.Contracts.csproj"
             }
           }
         }
@@ -2006,13 +2006,5 @@
         "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.304\\RuntimeIdentifierGraph.json"
       }
     }
-  },
-  "logs": [
-    {
-      "code": "Undefined",
-      "level": "Warning",
-      "warningLevel": 1,
-      "message": "Problem reading the cache file c:\\Users\\Kasparov\\Desktop\\dev\\univ\\Forge\\Forge\\obj\\project.nuget.cache : Invalid property identifier character: <. Path 'version', line 3, position 0."
-    }
-  ]
+  }
 }

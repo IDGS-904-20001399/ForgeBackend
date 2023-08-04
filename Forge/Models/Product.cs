@@ -1,5 +1,6 @@
 using ErrorOr;
 using Forge.Contracts.Products;
+using Forge.Contracts.Supplies;
 using Forge.ServiceErrors;
 
 namespace Forge.Models
@@ -14,6 +15,7 @@ namespace Forge.Models
         public string Category { get; private set;}
         public double Price { get; private set;}
         public string Image { get; private set;}
+        public int Status { get; private set;}
 
         public Product(){}
         private Product(

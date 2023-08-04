@@ -1,28 +1,33 @@
 using System.Data;
+using System.Diagnostics;
+using Dapper;
 using ErrorOr;
 using Forge.Models;
-using Forge.ServiceErrors;
 using MySql.Data.MySqlClient;
-using Dapper;
-using System.Diagnostics;
+using Forge.ServiceErrors;
 
-namespace Forge.Services.Products
+namespace Forge.Services.Supplies
 {
-    public class ProductService : IProductService
+    public class SupplyService : ISupplyService
     {
+
         private readonly MySqlConnection _dbConnection;
 
-        public ProductService(MySqlConnection dbConnection)
+        public SupplyService(MySqlConnection dbConnection)
         {
             _dbConnection = dbConnection;
         }
 
-        public ErrorOr<Created> CreateProduct(Product product)
+        public ErrorOr<Created> CreateSupply(Supply supply)
         {
             try
             {
-                string query = "CALL add_product(@Name, @Description, @Category, @Price, @Image)";
-                product.Id = _dbConnection.QueryFirstOrDefault<int>(query, product);
+                var parameters = new DynamicParameters();
+                parameters.AddDynamicParams(supply);
+                parameters.Add("Id", dbType: DbType.Int32, direction: ParameterDirection.Output);
+
+                _dbConnection.Execute("add_supply", parameters, commandType: CommandType.StoredProcedure);
+                supply.Id = parameters.Get<int>("Id");
             }
             catch (Exception e)
             {
@@ -32,11 +37,11 @@ namespace Forge.Services.Products
             return Result.Created;
         }
 
-        public ErrorOr<Deleted> DeleteProduct(int id)
+        public ErrorOr<Deleted> DeleteSupply(int id)
         {
             try
             {
-                string query = "UPDATE product SET STATUS = 0 WHERE id = @Id";
+                string query = "UPDATE supply SET status = 0 WHERE id = @Id";
                 _dbConnection.Execute(query, new { Id = id });
             }
             catch (Exception e)
@@ -48,14 +53,29 @@ namespace Forge.Services.Products
             return Result.Deleted;
         }
 
-        public ErrorOr<Product> GetProduct(int id)
+        public ErrorOr<List<Supply>> GetSupplies()
         {
             try
             {
-                string query = "SELECT * FROM product WHERE id = @Id AND status = 1";
-                Product product =  _dbConnection.QueryFirstOrDefault<Product>(query, new { Id = id });
-                if(product != null){
-                    return product;
+                string query = "SELECT * FROM supply WHERE status = 1";
+                return _dbConnection.Query<Supply>(query).ToList();
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine("--------------------------------ERROR-----------------------------------------");
+                Debug.WriteLine(e);
+            }
+            return Errors.Supply.NotFound;
+        }
+
+        public ErrorOr<Supply> GetSupply(int id)
+        {
+            try
+            {
+                string query = "SELECT * FROM supply WHERE id = @Id AND status = 1";
+                Supply supply = _dbConnection.QueryFirstOrDefault<Supply>(query, new { Id = id });
+                if (supply != null){
+                    return supply;
                 }
             }
             catch (Exception e)
@@ -63,44 +83,27 @@ namespace Forge.Services.Products
                 Debug.WriteLine("--------------------------------ERROR-----------------------------------------");
                 Debug.WriteLine(e);
             }
-            return Errors.Product.NotFound;
+            return Errors.Supply.NotFound;
         }
 
-        public ErrorOr<List<Product>> GetProducts()
-        {
-            try
-            {
-                string query = "SELECT * FROM product WHERE status = 1";
-                return _dbConnection.Query<Product>(query).ToList();
-            }
-            catch (Exception e)
-            {
-                Debug.WriteLine("--------------------------------ERROR-----------------------------------------");
-                Debug.WriteLine(e);
-            }
-            return Errors.Product.NotFound;
-
-        }
-
-        public ErrorOr<UpsertedProduct> UpsertProduct(Product product)
+        public ErrorOr<UpsertedSuply> UpsertSupply(Supply supply)
         {
             bool isNewlyCreated = false;
             try
             {
                 var parameters = new DynamicParameters();
-                parameters.AddDynamicParams(product);
-                parameters.Add("is_inserted", dbType: DbType.Int32, direction: ParameterDirection.Output);
+                parameters.AddDynamicParams(supply);
+                parameters.Add("Created", dbType: DbType.Int32, direction: ParameterDirection.Output);
 
-                _dbConnection.Execute("upsert_prodcut", parameters, commandType: CommandType.StoredProcedure);
-                isNewlyCreated = parameters.Get<int>("is_inserted") == 1;
+                _dbConnection.Execute("upsert_supply", parameters, commandType: CommandType.StoredProcedure);
+                isNewlyCreated = parameters.Get<int>("Created") == 1;
             }
             catch (Exception e)
             {
                 Debug.WriteLine("--------------------------------ERROR-----------------------------------------");
                 Debug.WriteLine(e);
             }
-            return new UpsertedProduct(isNewlyCreated);
+            return new UpsertedSuply(isNewlyCreated);
         }
     }
-
 }
