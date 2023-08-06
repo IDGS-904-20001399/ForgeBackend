@@ -1,4 +1,5 @@
-
 @id = 3
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6ImN1c3RvbWVyQGdtYWlsLmNvbSIsInJvbGUiOiJjdXN0b21lciIsIm5iZiI6MTY5MTM0NzA1NSwiZXhwIjoxNjkzOTM5MDU1LCJpYXQiOjE2OTEzNDcwNTUsImlzcyI6Imh0dHA6Ly9sb2NhbGhvc3Q6NTA4OCIsImF1ZCI6Imh0dHA6Ly9sb2NhbGhvc3Q6NTA4OCJ9.GTVHwO6G1vmumAFQ1eb29cxKELYJTRgm3rjexUZ_Mrw
 
 DELETE  http://localhost:5088/api/products/{{id}}
+Authorization: Bearer {{token}}

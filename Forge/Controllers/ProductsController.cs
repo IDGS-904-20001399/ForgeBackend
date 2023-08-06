@@ -4,6 +4,7 @@ using Forge.Contracts.Supplies;
 using Forge.Models;
 using Forge.ServiceErrors;
 using Forge.Services.Products;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
@@ -20,6 +21,7 @@ namespace Forge.Controllers
         }
 
         [HttpPost]
+        [Authorize(Policy = "Admin")]
         public IActionResult CreateProduct(CreateProductRequest request)
         {
             ErrorOr<Product> requestToProductResult = Product.From(request);
@@ -64,9 +66,10 @@ namespace Forge.Controllers
         [HttpPut("{id:int}")]
         public IActionResult UpsertProduct(int id, UpsertProductRequest request)
         {
-            ErrorOr<Product> requestToProductResult =  Product.From(id, request);
+            ErrorOr<Product> requestToProductResult = Product.From(id, request);
 
-            if (requestToProductResult.IsError){
+            if (requestToProductResult.IsError)
+            {
                 return Problem(requestToProductResult.Errors);
             }
 
@@ -81,6 +84,7 @@ namespace Forge.Controllers
         }
 
         [HttpDelete("{id:int}")]
+        [Authorize(Policy = "Admin")]
         public IActionResult DeleteProduct(int id)
         {
             ErrorOr<Deleted> deleteProductResult = _productService.DeleteProduct(id);
@@ -90,9 +94,11 @@ namespace Forge.Controllers
             );
         }
 
-        private static List<ProductResponse> MapProductResponses(List<Product> products){
+        private static List<ProductResponse> MapProductResponses(List<Product> products)
+        {
             List<ProductResponse> responses = new List<ProductResponse>();
-            foreach(var product in products){
+            foreach (var product in products)
+            {
                 responses.Add(MapProductResponse(product));
             }
             return responses;
