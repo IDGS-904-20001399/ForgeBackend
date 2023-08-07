@@ -25,7 +25,8 @@ var builder = WebApplication.CreateBuilder(args);
     builder.Services.AddAuthorization(options =>
 {
     options.AddPolicy("Admin", policy => policy.RequireRole("admin"));
-    options.AddPolicy("Client", policy => policy.RequireRole("client"));
+    options.AddPolicy("Client", policy => policy.RequireRole("customer"));
+    options.AddPolicy("Logged", policy => policy.RequireRole("admin", "customer",  "seller", "stocker"));
 });
     builder.Services.AddAuthentication(options =>
     {

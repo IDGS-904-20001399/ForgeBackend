@@ -43,6 +43,7 @@ namespace Forge.Controllers
 
 
         [HttpGet("{id:int}")]
+        [Authorize(Policy = "Logged")]
         public IActionResult GetProduct(int id)
         {
             ErrorOr<Product> getProductResult = _productService.GetProduct(id);
@@ -53,6 +54,7 @@ namespace Forge.Controllers
         }
 
         [HttpGet()]
+        [Authorize(Policy = "Logged")]
         public IActionResult GetProducts()
         {
             ErrorOr<List<Product>> getProductResult = _productService.GetProducts();
@@ -64,6 +66,7 @@ namespace Forge.Controllers
 
 
         [HttpPut("{id:int}")]
+        [Authorize(Policy = "Admin")]
         public IActionResult UpsertProduct(int id, UpsertProductRequest request)
         {
             ErrorOr<Product> requestToProductResult = Product.From(id, request);
