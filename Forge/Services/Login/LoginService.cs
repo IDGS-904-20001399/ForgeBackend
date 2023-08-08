@@ -29,18 +29,22 @@ namespace Forge.Services.Login
             {
                 bool authenticated = false;
                 string message = $"The user {request.Email} does not exists.";
+                string name = "";
                 string token = "";
+                string role = "";
 
                 string query = "SELECT count(*) FROM user WHERE email = @Email";
                 int nUsers = _dbConnection.QueryFirstOrDefault<int>(query, new { request.Email });
                 if (nUsers >= 1)
                 {
-                    string authenticationQuery = "SELECT id FROM user WHERE email = @Email and password = @Password";
-                    int id = _dbConnection.QueryFirstOrDefault<int>(authenticationQuery, new { request.Email, request.Password });
-                    if (id != 0)
+                    string authenticationQuery = "SELECT u.id, (SELECT names from customer c where user_id = u.id) customer_name, (SELECT if (customer_name is not null, customer_name, email)) as name FROM user u WHERE email = @Email and password = @Password; ";
+                    var user = _dbConnection.QueryFirstOrDefault<dynamic>(authenticationQuery, new { request.Email, request.Password });
+                    if (user != null)
                     {
                         string rolesQuery = "SELECT name from role where id = (select role_id from roles_users where user_id = @Id)";
-                        var roles = _dbConnection.Query<string>(rolesQuery, new { Id = id }).ToList();
+                        var roles = _dbConnection.Query<string>(rolesQuery, new { user.id }).ToList();
+                        role = roles[0];
+                        name = user.name;
                         authenticated = true;
                         message = "User authenticated.";
                         token = generateToken(request.Email, roles);
@@ -50,7 +54,7 @@ namespace Forge.Services.Login
                         message = "The password is wrong please try again.";
                     }
                 }
-                return new LoginResponse(authenticated, token, message);
+                return new LoginResponse(authenticated, token, message, name, role);
             }
             catch (Exception e)
             {
