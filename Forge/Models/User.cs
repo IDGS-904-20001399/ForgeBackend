@@ -12,6 +12,7 @@ namespace Forge.Models
         public string ConfirmedAt  { get; private set;}
         public int Status  { get; private set;}
         public int RoleId  { get; private set;}
+        public string Role  { get; private set;}
         public User(){}
 
         private User(string email, string password, int roleId){

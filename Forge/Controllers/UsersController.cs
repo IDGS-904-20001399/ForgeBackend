@@ -112,6 +112,7 @@ namespace Forge.Controllers
             return new UserResponse(
                 user.Id,
                 user.Email,
+                user.Role,
                 user.RoleId
             );
         }
