@@ -5,6 +5,7 @@ using System.Text;
 using Forge.Services.Login;
 using Forge.Services.Products;
 using Forge.Services.Supplies;
+using Forge.Services.Users;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using MySql.Data.MySqlClient;
@@ -15,6 +16,7 @@ var builder = WebApplication.CreateBuilder(args);
     builder.Services.AddScoped<IProductService, ProductService>();
     builder.Services.AddScoped<ISupplyService, SupplyService>();
     builder.Services.AddScoped<ILoginService, LoginService>();
+    builder.Services.AddScoped<IUserService, UserService>();
     builder.Services.AddTransient<MySqlConnection>((sp) =>
         {
             var configuration = sp.GetRequiredService<IConfiguration>();

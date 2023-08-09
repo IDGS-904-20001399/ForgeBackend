@@ -60,14 +60,6 @@ namespace Forge.Controllers
         public IActionResult GetSupplies()
         {
             ErrorOr<List<Supply>> getSuppliesResult = _supplyService.GetSupplies();
-            foreach(var s in getSuppliesResult.Value){
-                Debug.WriteLine("Supply");
-                Debug.WriteLine(s.Id);
-                Debug.WriteLine("Buy unit");
-                Debug.WriteLine(s.BuyUnit);
-                Debug.WriteLine("Use Unit");
-                Debug.WriteLine(s.UseUnit);
-            }
             return getSuppliesResult.Match(
                 Supplies => Ok(MapSuppliesResponses(Supplies)),
                 errors => Problem(errors)
@@ -77,7 +69,7 @@ namespace Forge.Controllers
 
         [HttpPut("{id:int}")]
         [Authorize(Policy = "Admin")]
-        public IActionResult UpsertProduct(int id, CreateSupplyRequest request)
+        public IActionResult UpsertSupply(int id, CreateSupplyRequest request)
         {
             ErrorOr<Supply> requestToSupplyResult =  Supply.From(id, request);
 
@@ -97,7 +89,7 @@ namespace Forge.Controllers
 
         [HttpDelete("{id:int}")]
         [Authorize(Policy = "Admin")]
-        public IActionResult DeleteProduct(int id)
+        public IActionResult DeleteSupply(int id)
         {
             ErrorOr<Deleted> deleteSupplyResult = _supplyService.DeleteSupply(id);
             return deleteSupplyResult.Match(
