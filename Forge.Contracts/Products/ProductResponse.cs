@@ -10,6 +10,9 @@ namespace Forge.Contracts.Products
         int Id,
         string Name,
         string Description,
+        string Width,
+        string Length,
+        string Height,
         string Category,
         double Price,
         string image);

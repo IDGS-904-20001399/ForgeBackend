@@ -21,8 +21,12 @@ namespace Forge.Services.Products
         {
             try
             {
-                string query = "CALL add_product(@Name, @Description, @Category, @Price, @Image)";
-                product.Id = _dbConnection.QueryFirstOrDefault<int>(query, product);
+                var parameters = new DynamicParameters();
+                parameters.AddDynamicParams(product);
+                parameters.Add("InsertedId", dbType: DbType.Int32, direction: ParameterDirection.Output);
+
+                _dbConnection.Execute("add_product", parameters, commandType: CommandType.StoredProcedure);
+                product.Id = parameters.Get<int>("InsertedId");
             }
             catch (Exception e)
             {
@@ -89,10 +93,10 @@ namespace Forge.Services.Products
             {
                 var parameters = new DynamicParameters();
                 parameters.AddDynamicParams(product);
-                parameters.Add("is_inserted", dbType: DbType.Int32, direction: ParameterDirection.Output);
+                parameters.Add("Created", dbType: DbType.Int32, direction: ParameterDirection.Output);
 
-                _dbConnection.Execute("upsert_prodcut", parameters, commandType: CommandType.StoredProcedure);
-                isNewlyCreated = parameters.Get<int>("is_inserted") == 1;
+                _dbConnection.Execute("upsert_product", parameters, commandType: CommandType.StoredProcedure);
+                isNewlyCreated = parameters.Get<int>("Created") == 1;
             }
             catch (Exception e)
             {

@@ -12,6 +12,9 @@ namespace Forge.Models
         public int Id { get; set;}
         public string Name { get; private set;}
         public string Description { get; private set;}
+        public string Width { get; private set;}
+        public string Length { get; private set;}
+        public string Height { get; private set;}
         public string Category { get; private set;}
         public double Price { get; private set;}
         public string Image { get; private set;}
@@ -21,12 +24,18 @@ namespace Forge.Models
         private Product(
                        string name,
                        string description,
+                       string width,
+                       string length,
+                       string height,
                        string category,
                        double price,
                        string image)
         {
             Name = name;
             Description = description;
+            Width = width;
+            Length = length;
+            Height = height;
             Category = category;
             Price = price;
             Image = image;
@@ -36,6 +45,9 @@ namespace Forge.Models
             return Create(
                 request.Name,
                 request.Description,
+                request.Width,
+                request.Length,
+                request.Height,
                 request.Category,
                 request.Price,
                 request.Image
@@ -46,6 +58,9 @@ namespace Forge.Models
             return Create(
                 request.Name,
                 request.Description,
+                request.Width,
+                request.Length,
+                request.Height,
                 request.Category,
                 request.Price,
                 request.Image,
@@ -56,6 +71,9 @@ namespace Forge.Models
         public static ErrorOr<Product> Create(
                        string name,
                        string description,
+                       string width,
+                       string length,
+                       string height,
                        string category,
                        double price,
                        string image,
@@ -75,7 +93,7 @@ namespace Forge.Models
                 return errors;
             }
 
-            return new Product(name, description, category, price, image){Id = id ?? 0};
+            return new Product(name, description, width, length, height, category, price, image){Id = id ?? 0};
         }
 
     }

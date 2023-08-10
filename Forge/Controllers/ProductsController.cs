@@ -113,6 +113,9 @@ namespace Forge.Controllers
                 product.Id,
                 product.Name,
                 product.Description,
+                product.Width,
+                product.Length,
+                product.Height,
                 product.Category,
                 product.Price,
                 product.Image

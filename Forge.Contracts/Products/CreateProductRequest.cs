@@ -9,6 +9,9 @@ namespace Forge.Contracts.Products
     public record CreateProductRequest(
         string Name,
         string Description,
+        string Width,
+        string Length,
+        string Height,
         string Category,
         double Price,
         string Image
