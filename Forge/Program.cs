@@ -4,6 +4,7 @@ using System.Security.Cryptography;
 using System.Text;
 using Forge.Services.Login;
 using Forge.Services.Products;
+using Forge.Services.Suppliers;
 using Forge.Services.Supplies;
 using Forge.Services.Users;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -17,6 +18,7 @@ var builder = WebApplication.CreateBuilder(args);
     builder.Services.AddScoped<ISupplyService, SupplyService>();
     builder.Services.AddScoped<ILoginService, LoginService>();
     builder.Services.AddScoped<IUserService, UserService>();
+    builder.Services.AddScoped<ISupplierService, SupplierService>();
     builder.Services.AddTransient<MySqlConnection>((sp) =>
         {
             var configuration = sp.GetRequiredService<IConfiguration>();

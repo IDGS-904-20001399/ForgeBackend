@@ -1,0 +1,6 @@
+
+@id = 2 
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6ImFkbWluQGdtYWlsLmNvbSIsInJvbGUiOiJhZG1pbiIsIm5iZiI6MTY5MTYwOTI4MCwiZXhwIjoxNjk0MjAxMjgwLCJpYXQiOjE2OTE2MDkyODAsImlzcyI6Imh0dHA6Ly9sb2NhbGhvc3Q6NTA4OCIsImF1ZCI6Imh0dHA6Ly9sb2NhbGhvc3Q6NTA4OCJ9.PGWCDtM9T0GXbi1gkq7H1LtoJXSNARCGz4anx38hNGI
+
+DELETE  http://localhost:5088/api/suppliers/{{id}}
+Authorization: Bearer {{token}}

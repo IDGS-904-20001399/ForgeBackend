@@ -1,0 +1,16 @@
+
+
+@name = "supplier"
+@email = "request2@gmail.com"
+@phone = "4774008971"
+@token =eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6ImFkbWluQGdtYWlsLmNvbSIsInJvbGUiOiJhZG1pbiIsIm5iZiI6MTY5MTU1NTYwNSwiZXhwIjoxNjk0MTQ3NjA0LCJpYXQiOjE2OTE1NTU2MDUsImlzcyI6Imh0dHA6Ly9sb2NhbGhvc3Q6NTA4OCIsImF1ZCI6Imh0dHA6Ly9sb2NhbGhvc3Q6NTA4OCJ9.Yq-zGLRqbEFv2GxPMH2nd93MKssQvLcj4-VEF2AV-eQ 
+
+POST  http://localhost:5088/api/suppliers
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+    "name": {{name}},
+    "email": {{email}},
+    "phone": {{phone}}
+}

@@ -1,45 +1,27 @@
-DELIMITER $$
+DELIMITER //
 
-CREATE PROCEDURE `add_user`(
-    IN `Email` VARCHAR(100), 
-    IN `Password` VARCHAR(100), 
-    IN `RoleId` int, 
-    OUT Id int)
+CREATE PROCEDURE UpsertSupplier(
+  IN Id INT,
+  IN Name VARCHAR(60),
+  IN Email VARCHAR(60),
+  IN Phone VARCHAR(60),
+  OUT Created INT
+)
 BEGIN
-INSERT INTO user (email, password) VALUES (Email, Password);
-SET Id = LAST_INSERT_ID();
-INSERT INTO roles_users (user_id, role_id) VALUE (Id, RoleId);
-END$$
-
-DELIMITER ;
-
-DELIMITER $$
-CREATE PROCEDURE `upsert_user`(
-    IN `Id` INT, 
-    IN `Email` VARCHAR(100), 
-    IN `Password` VARCHAR(100), 
-    IN `RoleId` int, 
-    OUT `Created` INT)
-BEGIN
-DECLARE param_id INT;
- SET param_id = Id;
-
- DELETE FROM roles_users WHERE user_id = param_id;
-
-IF ((SELECT COUNT(u.id) FROM user u WHERE u.id = param_id) > 0) THEN
-
-    UPDATE `user` u SET 
-            email = Email,
-            password = Password
-            where u.id = param_id;
-
-    SET Created = 0;
-ELSE
-    INSERT INTO user (id, email, password) VALUES (param_id, Email, Password);
+  DECLARE existing_id INT;
+  
+  -- Check if a row with the provided Id exists
+  SELECT id INTO existing_id FROM supplier WHERE id = Id;
+  
+  IF existing_id IS NULL THEN
+    -- Insert a new row
+    INSERT INTO supplier (id, name, email, phone) VALUES (Id, Name, Email, Phone);
     SET Created = 1;
-END IF;
+  ELSE
+    -- Update the existing row
+    UPDATE supplier SET name = Name, email = Email, phone = Phone WHERE id = Id;
+    SET Created = 0;
+  END IF;
+END //
 
-INSERT INTO roles_users (user_id, role_id) VALUE (Id, RoleId);
-
-END$$
 DELIMITER ;
