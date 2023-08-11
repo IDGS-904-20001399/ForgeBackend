@@ -97,6 +97,28 @@ namespace Forge.Controllers
             );
         }
 
+        [HttpPost("details/{id:int}")]
+        [Authorize(Policy = "Admin")]
+        public IActionResult SetDetails(int id, DetailProductRequest request)
+        {
+            ErrorOr<ErrorOr.Created> DetailsResult = _productService.AddSupplies(request);
+            return DetailsResult.Match(
+                created => NoContent(),
+                errors => Problem(errors)
+            );
+        }
+
+        [HttpGet("details/{id:int}")]
+        [Authorize(Policy = "Admin")]
+        public IActionResult GetDetails(int id)
+        {
+            ErrorOr<DetailProductResponse> DetailsResult = _productService.GetProductDetails(id);
+            return DetailsResult.Match(
+                Details => Ok(Details),
+                errors => Problem(errors)
+            );
+        }
+
         private static List<ProductResponse> MapProductResponses(List<Product> products)
         {
             List<ProductResponse> responses = new List<ProductResponse>();

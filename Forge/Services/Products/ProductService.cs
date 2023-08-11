@@ -5,6 +5,7 @@ using Forge.ServiceErrors;
 using MySql.Data.MySqlClient;
 using Dapper;
 using System.Diagnostics;
+using Forge.Contracts.Products;
 
 namespace Forge.Services.Products
 {
@@ -57,8 +58,9 @@ namespace Forge.Services.Products
             try
             {
                 string query = "SELECT * FROM product WHERE id = @Id AND status = 1";
-                Product product =  _dbConnection.QueryFirstOrDefault<Product>(query, new { Id = id });
-                if(product != null){
+                Product product = _dbConnection.QueryFirstOrDefault<Product>(query, new { Id = id });
+                if (product != null)
+                {
                     return product;
                 }
             }
@@ -86,6 +88,23 @@ namespace Forge.Services.Products
 
         }
 
+        public ErrorOr<Created> AddSupplies(DetailProductRequest request)
+        {
+            // Delete existing rows
+            string query = "DELETE FROM product_supplies WHERE product_id = @Id";
+            _dbConnection.Execute(query, new { Id = request.Id });
+
+            string supplyQuery = "INSERT INTO product_supplies (product_id, supply_id, quantity)" +
+                                "VALUES (@ProductID, @SupplyID, @Quantity)";
+            foreach (var supply in request.Supplies)
+            {
+                _dbConnection.Execute(supplyQuery, new { ProductID = request.Id, SupplyID = supply.SupplyId, Quantity = supply.Quantity });
+            }
+
+            return Result.Created;
+        }
+
+
         public ErrorOr<UpsertedProduct> UpsertProduct(Product product)
         {
             bool isNewlyCreated = false;
@@ -104,6 +123,18 @@ namespace Forge.Services.Products
                 Debug.WriteLine(e);
             }
             return new UpsertedProduct(isNewlyCreated);
+        }
+
+        public ErrorOr<DetailProductResponse> GetProductDetails(int id)
+        {
+            string productSuppliesQuery = "SELECT s.*, ps.quantity FROM supply s INNER JOIN product_supplies ps ON s.id = ps.supply_id WHERE ps.product_id = @Id";
+            List<DetailSupplyResponse> productSupplies = _dbConnection.Query<DetailSupplyResponse>(productSuppliesQuery, new { Id = id }).ToList();
+
+            string otherSuppliesQuery = "SELECT s.* from supply s where s.id not in (select supply_id from product_supplies where product_id = @Id)";
+            List<DetailSupplyResponse> otherSupplies = _dbConnection.Query<DetailSupplyResponse>(otherSuppliesQuery, new { Id = id }).ToList();
+
+
+            return new DetailProductResponse(id, productSupplies, otherSupplies);
         }
     }
 
