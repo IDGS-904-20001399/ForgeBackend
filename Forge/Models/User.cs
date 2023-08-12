@@ -29,6 +29,15 @@ namespace Forge.Models
             );
         }
 
+        public static ErrorOr<User> From(int id, UpsertUserRequest request){
+            return Create(
+                request.Email,
+                "",
+                request.RoleId,
+                id
+            );
+        }
+
         public static ErrorOr<User> From(int id, CreateUserRequest request){
             return Create(
                 request.Email,

@@ -1,5 +1,6 @@
 
 using ErrorOr;
+using Forge.Contracts.Supplies;
 using Forge.Models;
 
 namespace Forge.Services.Supplies
@@ -11,5 +12,6 @@ namespace Forge.Services.Supplies
         ErrorOr<Supply> GetSupply(int id);
         ErrorOr<List<Supply>> GetSupplies();
         ErrorOr<UpsertedSuply> UpsertSupply(Supply supply);
+        ErrorOr<Created> BuySupply(BuySupplyRequest request);
     }
 }

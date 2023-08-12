@@ -71,9 +71,10 @@ namespace Forge.Controllers
         [Authorize(Policy = "Admin")]
         public IActionResult UpsertSupply(int id, CreateSupplyRequest request)
         {
-            ErrorOr<Supply> requestToSupplyResult =  Supply.From(id, request);
+            ErrorOr<Supply> requestToSupplyResult = Supply.From(id, request);
 
-            if (requestToSupplyResult.IsError){
+            if (requestToSupplyResult.IsError)
+            {
                 return Problem(requestToSupplyResult.Errors);
             }
 
@@ -98,9 +99,22 @@ namespace Forge.Controllers
             );
         }
 
-        private static List<SupplyResponse> MapSuppliesResponses(List<Supply> supplies){
+        [HttpPost("buy")]
+        [Authorize(Policy = "Admin")]
+        public IActionResult SetDetails(BuySupplyRequest request)
+        {
+            ErrorOr<ErrorOr.Created> BuyResult = _supplyService.BuySupply(request);
+            return BuyResult.Match(
+                created => NoContent(),
+                errors => Problem(errors)
+            );
+        }
+
+        private static List<SupplyResponse> MapSuppliesResponses(List<Supply> supplies)
+        {
             List<SupplyResponse> responses = new List<SupplyResponse>();
-            foreach(var supply in supplies){
+            foreach (var supply in supplies)
+            {
                 responses.Add(MapSupplyResponse(supply));
             }
             return responses;

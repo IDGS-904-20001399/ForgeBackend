@@ -70,7 +70,7 @@ namespace Forge.Controllers
 
         [HttpPut("{id:int}")]
         [Authorize(Policy = "Admin")]
-        public IActionResult UpsertUser(int id, CreateUserRequest request)
+        public IActionResult UpsertUser(int id, UpsertUserRequest request)
         {
             ErrorOr<User> requestToUserResult =  Models.User.From(id, request);
 

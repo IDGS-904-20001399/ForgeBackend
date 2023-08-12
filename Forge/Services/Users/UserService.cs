@@ -75,7 +75,7 @@ namespace Forge.Services.Users
         {
             try
             {
-                string query = "SELECT u.*, (SELECT role_id from roles_users where user_id = u.id) role_id, (SELECT name FROM role r where r.id = role_id ) role FROM user u WHERE u.status = 1";
+                string query = "SELECT u.*, (SELECT role_id from roles_users where user_id = u.id) role_id, (SELECT name FROM role r where r.id = role_id ) role FROM user u WHERE u.status = 1 AND u.id in (SELECT user_id from roles_users where role_id <> 4)";
                 return _dbConnection.Query<User>(query).ToList();
             }
             catch (Exception e)

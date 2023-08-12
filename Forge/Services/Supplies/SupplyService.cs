@@ -5,6 +5,7 @@ using ErrorOr;
 using Forge.Models;
 using MySql.Data.MySqlClient;
 using Forge.ServiceErrors;
+using Forge.Contracts.Supplies;
 
 namespace Forge.Services.Supplies
 {
@@ -16,6 +17,31 @@ namespace Forge.Services.Supplies
         public SupplyService(MySqlConnection dbConnection)
         {
             _dbConnection = dbConnection;
+        }
+
+        public ErrorOr<Created> BuySupply(BuySupplyRequest request)
+        {
+            // Delete existing rows
+            string supplyQuery = "SELECT * FROM supply WHERE id = @Id";
+
+            var supply = _dbConnection.QueryFirstOrDefault<dynamic>(supplyQuery, new {Id = request.SupplyId});
+
+            if (supply != null){
+                 var parameters = new
+                {
+                    BuyDate = DateTime.Now,
+                    Quantity = request.Quantity,
+                    AvailableUseQuantity = request.Quantity * supply.equivalence,
+                    UnitCost = supply.cost,
+                    SupplyId = request.SupplyId 
+                };
+
+                // Call the stored procedure using Dapper
+                _dbConnection.Execute("BuySupply", parameters, commandType: CommandType.StoredProcedure);
+            }
+
+
+            return Result.Created;
         }
 
         public ErrorOr<Created> CreateSupply(Supply supply)
