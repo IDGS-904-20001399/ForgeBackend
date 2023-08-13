@@ -2,7 +2,7 @@ using System.Data;
 using System.Diagnostics;
 using System.Security.Cryptography;
 using System.Text;
-using Forge.Services.Customer;
+using Forge.Services.Customers;
 using Forge.Services.Login;
 using Forge.Services.Products;
 using Forge.Services.Suppliers;

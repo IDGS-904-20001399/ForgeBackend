@@ -1,0 +1,20 @@
+@email = "testcustomer5@gmail.com"
+@password = "12345"
+@confirmPassword = "12345"
+@names = "Juan Carlos"
+@lastNames = "Estrada Gasca" 
+@address = "Calle falsa #123"
+@phone = "4774008971"
+
+POST  http://localhost:5088/api/customers/signup
+Content-Type: application/json
+
+{
+    "email": {{email}},
+    "password": {{password}},
+    "confirmPassword": {{password}},
+    "names": {{names}},
+    "lastNames": {{lastNames}},
+    "address": {{address}},
+    "phone": {{phone}}
+}

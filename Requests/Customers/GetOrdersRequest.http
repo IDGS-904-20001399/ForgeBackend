@@ -1,0 +1,10 @@
+
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6ImN1c3RvbWVyQGdtYWlsLmNvbSIsInJvbGUiOiJjdXN0b21lciIsIm5iZiI6MTY5MTk0NTY2MSwiZXhwIjoxNjk0NTM3NjYxLCJpYXQiOjE2OTE5NDU2NjEsImlzcyI6Imh0dHA6Ly9sb2NhbGhvc3Q6NTA4OCIsImF1ZCI6Imh0dHA6Ly9sb2NhbGhvc3Q6NTA4OCJ9.RiP7au6gKTmw8oqpg75_INiI1MkTK2hcl6mXPNz08kY
+
+POST  http://localhost:5088/api/customers/orders
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+    "customerId": 4
+}

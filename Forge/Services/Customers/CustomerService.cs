@@ -9,7 +9,7 @@ using Forge.Contracts.Customers;
 using System.Data;
 using System.Reflection;
 
-namespace Forge.Services.Customer
+namespace Forge.Services.Customers
 {
     public class CustomerService : ICustomerService
     {
@@ -54,7 +54,7 @@ namespace Forge.Services.Customer
                 parameters.Add("Payment", $"Card {MaskString(request.Card.CardNumber)}");
                 parameters.Add("DeliveryFee", DeliveryFee);
                 parameters.Add("Status", "Created");
-                parameters.Add("DateValue", DateTime.Today);
+                parameters.Add("DateValue", DateTime.Now);
                 parameters.Add("UserId", request.CustomerId);
 
                 string insertQuery = "InsertOrder";
@@ -138,6 +138,46 @@ namespace Forge.Services.Customer
             }
 
             return dictionary;
+        }
+        public ErrorOr<Created> CreateCustomer(Customer customer)
+        {
+            try
+            {
+
+                var parameters = new DynamicParameters();
+                parameters.AddDynamicParams(customer);
+                parameters.Add("Id", dbType: DbType.Int32, direction: ParameterDirection.Output);
+
+                _dbConnection.Execute("add_user", parameters, commandType: CommandType.StoredProcedure);
+                customer.UserId = parameters.Get<int>("Id");
+
+                DynamicParameters CustomerParameters = new DynamicParameters();
+                CustomerParameters.AddDynamicParams(customer);
+                CustomerParameters.Add("InsertedId", DbType.Int32, direction: ParameterDirection.Output);
+
+                _dbConnection.Execute("InsertCustomer", CustomerParameters, commandType: CommandType.StoredProcedure);
+
+                customer.Id = CustomerParameters.Get<int>("InsertedId");
+
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine("--------------------------------ERROR-----------------------------------------");
+                Debug.WriteLine(e);
+            }
+            return Result.Created;
+        }
+
+        public ErrorOr<List<OrdersResponse>> GetOrders(OrderRequest request)
+        {
+            string orderQuery = "SELECT o.*, (SELECT SUM(quantity * price) FROM order_details WHERE order_id = o.id) subtotal, (SELECT subtotal + delivery_fee) total FROM `order` o WHERE user_id = @Id;";
+            var Orders = _dbConnection.Query<OrdersResponse>(orderQuery, new {Id = request.CustomerId}).ToList();
+            foreach(var order in Orders){
+                string detailsQuery = "SELECT od.*, (SELECT name from product where id = od.product_id) productName FROM `order_details` od where od.id = @Id; ";
+                order.Details = _dbConnection.Query<OrderDetailResponse>(detailsQuery, new {Id = order.Id}).ToList();
+            }
+
+            return Orders;
         }
     }
 }
