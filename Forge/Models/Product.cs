@@ -19,6 +19,7 @@ namespace Forge.Models
         public double Price { get; private set;}
         public string Image { get; private set;}
         public int Status { get; private set;}
+        public int Stock { get; private set;}
 
         public Product(){}
         private Product(

@@ -151,7 +151,8 @@ namespace Forge.Controllers
                 product.Height,
                 product.Category,
                 product.Price,
-                product.Image
+                product.Image,
+                product.Stock
             );
         }
         private IActionResult CreatedAtGetProduct(Product product)

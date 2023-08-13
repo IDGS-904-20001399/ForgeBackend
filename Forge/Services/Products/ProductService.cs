@@ -57,7 +57,7 @@ namespace Forge.Services.Products
         {
             try
             {
-                string query = "SELECT * FROM product WHERE id = @Id AND status = 1";
+                string query = "SELECT p.*, (SELECT SUM(available_quantity) from product_inventory WHERE product_id = p.id) stock FROM `product` p WHERE status = 1 and p.id = @Id";
                 Product product = _dbConnection.QueryFirstOrDefault<Product>(query, new { Id = id });
                 if (product != null)
                 {
@@ -76,7 +76,7 @@ namespace Forge.Services.Products
         {
             try
             {
-                string query = "SELECT * FROM product WHERE status = 1";
+                string query = "SELECT p.*, (SELECT SUM(available_quantity) from product_inventory WHERE product_id = p.id) stock FROM `product` p WHERE status = 1;";
                 return _dbConnection.Query<Product>(query).ToList();
             }
             catch (Exception e)

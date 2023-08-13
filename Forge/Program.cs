@@ -2,6 +2,7 @@ using System.Data;
 using System.Diagnostics;
 using System.Security.Cryptography;
 using System.Text;
+using Forge.Services.Customer;
 using Forge.Services.Login;
 using Forge.Services.Products;
 using Forge.Services.Suppliers;
@@ -19,6 +20,7 @@ var builder = WebApplication.CreateBuilder(args);
     builder.Services.AddScoped<ILoginService, LoginService>();
     builder.Services.AddScoped<IUserService, UserService>();
     builder.Services.AddScoped<ISupplierService, SupplierService>();
+    builder.Services.AddScoped<ICustomerService, CustomerService>();
     builder.Services.AddTransient<MySqlConnection>((sp) =>
         {
             var configuration = sp.GetRequiredService<IConfiguration>();
@@ -29,7 +31,7 @@ var builder = WebApplication.CreateBuilder(args);
     builder.Services.AddAuthorization(options =>
 {
     options.AddPolicy("Admin", policy => policy.RequireRole("admin"));
-    options.AddPolicy("Client", policy => policy.RequireRole("customer"));
+    options.AddPolicy("Customer", policy => policy.RequireRole("customer"));
     options.AddPolicy("Logged", policy => policy.RequireRole("admin", "customer",  "seller", "stocker"));
 });
     builder.Services.AddAuthentication(options =>
