@@ -1,6 +1,6 @@
 
-@supplyId = 2
-@quantity = 5
+@supplyId = 18 
+@quantity = 10
 
 POST  http://localhost:5088/api/supplies/buy
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6ImFkbWluQGdtYWlsLmNvbSIsInJvbGUiOiJhZG1pbiIsIm5iZiI6MTY5MTUyMTEwMSwiZXhwIjoxNjk0MTEzMTAxLCJpYXQiOjE2OTE1MjExMDEsImlzcyI6Imh0dHA6Ly9sb2NhbGhvc3Q6NTA4OCIsImF1ZCI6Imh0dHA6Ly9sb2NhbGhvc3Q6NTA4OCJ9.2U9aPLiyWmWfmn6uxK81PsU1dfgRQFBqJCj4PDz6akQ

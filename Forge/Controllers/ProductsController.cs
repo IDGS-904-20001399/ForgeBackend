@@ -108,6 +108,17 @@ namespace Forge.Controllers
             );
         }
 
+        [HttpPost("make")]
+        [Authorize(Policy = "Admin")]
+        public IActionResult Make(MakeProductRequest request)
+        {
+            ErrorOr<MakeProductResponse> makeResult = _productService.MakeProduct(request);
+            return makeResult.Match(
+                response => Ok(response),
+                errors => Problem(errors)
+            );
+        }
+
         [HttpGet("details/{id:int}")]
         [Authorize(Policy = "Admin")]
         public IActionResult GetDetails(int id)

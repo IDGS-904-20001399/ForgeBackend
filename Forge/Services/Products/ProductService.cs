@@ -136,6 +136,85 @@ namespace Forge.Services.Products
 
             return new DetailProductResponse(id, productSupplies, otherSupplies);
         }
+
+        public ErrorOr<MakeProductResponse> MakeProduct(MakeProductRequest request)
+        {
+            // Check that there are enough supplies to make the product
+            List<MissingSupplyResponse> MissingSupplies = new();
+            string message = "Not enough supplies";
+
+            string query = "CALL product_supply_details(@Id)";
+            var productSupplies = _dbConnection.Query<dynamic>(query, new { Id = request.ProductId });
+            double productionCost = 0;
+            foreach (var productSupply in productSupplies)
+            {
+                var quantityNeeded = productSupply.quantity * request.Quantity;
+                var missingQuantity = quantityNeeded - productSupply.stock_in_use_unit;
+                productionCost += productSupply.quantity_cost;
+                if (missingQuantity > 0)
+                {
+                    var buyMissingQuantity = Math.Ceiling(missingQuantity / productSupply.equivalence);
+                    MissingSupplies.Add(
+                        new MissingSupplyResponse(
+                            productSupply.name,
+                            missingQuantity,
+                            productSupply.use_unit,
+                            buyMissingQuantity,
+                            productSupply.buy_unit
+                            )
+                    );
+                }
+            }
+
+            // Make the product. Add row to the inventory
+            if (MissingSupplies.Count == 0)
+            {
+                var InventoryParameters = new
+                {
+                    CreationDate = DateTime.Today,
+                    Quantity = request.Quantity,
+                    AvailableQuantity = request.Quantity,
+                    UnitCost = productionCost,
+                    ProductId = request.ProductId
+                };
+
+                _dbConnection.Execute("InsertProductInventory", InventoryParameters, commandType: CommandType.StoredProcedure);
+
+                // Decrease the used supplies from warehouse
+                foreach (var productSupply in productSupplies)
+                {
+                    var spent_quantity = productSupply.quantity * request.Quantity;
+                    var buysQuery = "SELECT * from supply_buys WHERE supply_id = @Id order by buy_date ASC";
+                    var buys = _dbConnection.Query(buysQuery, new { Id = productSupply.id }).ToArray();
+                    int index = 0;
+                    var remaining = spent_quantity;
+                    string updateSuppliesQuery = "";
+
+                    while (true)
+                    {
+                        var buy = buys[index];
+                        var difference = buy.available_use_quantity - remaining;
+                        if (difference >= 0)
+                        {
+                            updateSuppliesQuery = "UPDATE supply_buys SET available_use_quantity = @NewValue WHERE id = @Id";
+                            _dbConnection.Execute(updateSuppliesQuery, new { Id = buy.id, NewValue = difference });
+                            break;
+                        }
+                        remaining = Math.Abs(difference);
+                        difference = 0;
+                        updateSuppliesQuery = "UPDATE supply_buys SET available_use_quantity = @NewValue WHERE id = @Id";
+                        _dbConnection.Execute(updateSuppliesQuery, new { Id = buy.id, NewValue = 0 });
+                        index++;
+                    }
+                }
+
+                message = "Product was made successfully";
+
+            }
+
+
+            return new MakeProductResponse(message, MissingSupplies);
+        }
     }
 
 }

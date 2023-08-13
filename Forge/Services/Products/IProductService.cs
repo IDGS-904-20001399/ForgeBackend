@@ -15,5 +15,7 @@ namespace Forge.Services.Products
         ErrorOr<Created> AddSupplies(DetailProductRequest request);
 
         ErrorOr<DetailProductResponse> GetProductDetails(int id);
+
+        ErrorOr<MakeProductResponse> MakeProduct(MakeProductRequest request);
     }
 }
