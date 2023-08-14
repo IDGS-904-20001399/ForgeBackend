@@ -1,4 +1,4 @@
-@email = "customer@gmail.com"
+@email = "admin@gmail.com"
 @password = "12345"
 
 POST  http://localhost:5088/api/login

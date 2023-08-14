@@ -141,7 +141,9 @@ namespace Forge.Controllers
                 supply.BuyUnit,
                 supply.UseUnit,
                 supply.Equivalence,
-                supply.Image
+                supply.Image,
+                supply.Stock,
+                supply.InventoryStatus
             );
         }
         private IActionResult CreatedAtGetSupply(Supply supply)

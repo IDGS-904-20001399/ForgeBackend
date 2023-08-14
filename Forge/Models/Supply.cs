@@ -18,6 +18,8 @@ namespace Forge.Models
         public string Image { get; private set;}
 
         public int Status { get; private set;}
+        public double Stock{get; set;}
+        public string InventoryStatus{get; set;}
 
         public Supply(){}
 

@@ -109,7 +109,7 @@ WHERE s.id = @SupplyId;";
         {
             try
             {
-                string query = "SELECT * FROM supply WHERE status = 1";
+                string query = "SELECT s.*, (SELECT SUM(available_use_quantity) / s.equivalence FROM supply_buys WHERE supply_id = s.id) stock, CASE WHEN (SELECT SUM(available_use_quantity) / s.equivalence FROM supply_buys WHERE supply_id = s.id) IS NULL OR (SELECT SUM(available_use_quantity) / s.equivalence FROM supply_buys WHERE supply_id = s.id) = 0 THEN 'Sin inventario' WHEN (SELECT SUM(available_use_quantity) / s.equivalence FROM supply_buys WHERE supply_id = s.id) >= 1 AND (SELECT SUM(available_use_quantity) / s.equivalence FROM supply_buys WHERE supply_id = s.id) <= 10 THEN 'Poco inventario' ELSE 'En inventario' END AS inventory_status FROM supply s WHERE status = 1";
                 return _dbConnection.Query<Supply>(query).ToList();
             }
             catch (Exception e)
@@ -124,7 +124,7 @@ WHERE s.id = @SupplyId;";
         {
             try
             {
-                string query = "SELECT * FROM supply WHERE id = @Id AND status = 1";
+                string query = "SELECT s.*, (SELECT SUM(available_use_quantity) / s.equivalence FROM supply_buys WHERE supply_id = s.id) stock, CASE WHEN (SELECT SUM(available_use_quantity) / s.equivalence FROM supply_buys WHERE supply_id = s.id) IS NULL OR (SELECT SUM(available_use_quantity) / s.equivalence FROM supply_buys WHERE supply_id = s.id) = 0 THEN 'Sin inventario' WHEN (SELECT SUM(available_use_quantity) / s.equivalence FROM supply_buys WHERE supply_id = s.id) >= 1 AND (SELECT SUM(available_use_quantity) / s.equivalence FROM supply_buys WHERE supply_id = s.id) <= 10 THEN 'Poco inventario' ELSE 'En inventario' END AS inventory_status FROM supply s WHERE status = 1 AND s.id = @Id";
                 Supply supply = _dbConnection.QueryFirstOrDefault<Supply>(query, new { Id = id });
                 if (supply != null)
                 {

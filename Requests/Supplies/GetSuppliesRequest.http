@@ -1,2 +1,3 @@
-
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6ImFkbWluQGdtYWlsLmNvbSIsInJvbGUiOiJhZG1pbiIsIm5iZiI6MTY5MjAzMDIzOSwiZXhwIjoxNjk0NjIyMjM5LCJpYXQiOjE2OTIwMzAyMzksImlzcyI6Imh0dHA6Ly9sb2NhbGhvc3Q6NTA4OCIsImF1ZCI6Imh0dHA6Ly9sb2NhbGhvc3Q6NTA4OCJ9.a259TVWXzchhgEFultoXC8GrF5_bMpLKir_lONKpb5E
 GET http://localhost:5088/api/supplies
+Authorization: Bearer {{token}}

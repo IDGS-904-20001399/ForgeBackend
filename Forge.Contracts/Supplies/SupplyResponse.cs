@@ -7,6 +7,8 @@ namespace Forge.Contracts.Supplies
         string BuyUnit,
         string UseUnit,
         double Equivalence,
-        string Image
+        string Image,
+        double Stock,
+        string InventoryStatus
     );
 }
