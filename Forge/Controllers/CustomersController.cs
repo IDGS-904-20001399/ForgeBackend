@@ -42,6 +42,12 @@ namespace Forge.Controllers
                 return Problem(requestToCustomerResult.Errors);
             }
 
+            if (request.Password != request.ConfirmPassword)
+            {
+
+                return Problem(new List<Error>(){Errors.User.PasswordsNotEqual});
+            }
+
             var customer = requestToCustomerResult.Value;
             ErrorOr<ErrorOr.Created> createCustomerResult = _customerService.CreateCustomer(customer);
 

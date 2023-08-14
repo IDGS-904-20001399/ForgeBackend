@@ -20,7 +20,7 @@ namespace Forge.Controllers
 
         public UsersController(IUserService userService)
         {
-            _userService = userService;;
+            _userService = userService; ;
         }
 
         [HttpPost]
@@ -32,6 +32,12 @@ namespace Forge.Controllers
             if (requestToUserResult.IsError)
             {
                 return Problem(requestToUserResult.Errors);
+            }
+
+            if (request.Password != request.ConfirmPassword)
+            {
+
+                return Problem(new List<Error>(){Errors.User.PasswordsNotEqual});
             }
 
             var user = requestToUserResult.Value;
@@ -72,9 +78,10 @@ namespace Forge.Controllers
         [Authorize(Policy = "Admin")]
         public IActionResult UpsertUser(int id, UpsertUserRequest request)
         {
-            ErrorOr<User> requestToUserResult =  Models.User.From(id, request);
+            ErrorOr<User> requestToUserResult = Models.User.From(id, request);
 
-            if (requestToUserResult.IsError){
+            if (requestToUserResult.IsError)
+            {
                 return Problem(requestToUserResult.Errors);
             }
 
@@ -99,9 +106,37 @@ namespace Forge.Controllers
             );
         }
 
-        private static List<UserResponse> MapUsersResponses(List<User> users){
-            List<UserResponse> responses = new ();
-            foreach(var user in users){
+        [HttpPost("updateemail")]
+        [Authorize(Policy = "Logged")]
+        public IActionResult UpdateEmail(UpdateEmailRequest request)
+        {
+            var ordersResult = _userService.UpdateEmail(request);
+
+            return ordersResult.Match(
+                Response => NoContent(),
+                errors => Problem(errors)
+            );
+
+        }
+
+        [HttpPost("updatepassword")]
+        [Authorize(Policy = "Logged")]
+        public IActionResult UpdatePassword(UpdatePasswordRequest request)
+        {
+            var ordersResult = _userService.UpdatePassword(request);
+
+            return ordersResult.Match(
+                Response => Ok(Response),
+                errors => Problem(errors)
+            );
+
+        }
+
+        private static List<UserResponse> MapUsersResponses(List<User> users)
+        {
+            List<UserResponse> responses = new();
+            foreach (var user in users)
+            {
                 responses.Add(MapUserResponse(user));
             }
             return responses;

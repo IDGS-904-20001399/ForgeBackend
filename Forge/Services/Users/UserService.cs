@@ -6,6 +6,8 @@ using Forge.Models;
 using Forge.Services;
 using MySql.Data.MySqlClient;
 using Forge.ServiceErrors;
+using Forge.Contracts.Users;
+using Org.BouncyCastle.X509.Store;
 
 namespace Forge.Services.Users
 {
@@ -22,9 +24,11 @@ namespace Forge.Services.Users
         {
             try
             {
-                if (IsEmailTaken(0, user.Email)){
+                if (IsEmailTaken(0, user.Email))
+                {
                     return Errors.User.EmailTaken;
                 }
+
                 var parameters = new DynamicParameters();
                 parameters.AddDynamicParams(user);
                 parameters.Add("Id", dbType: DbType.Int32, direction: ParameterDirection.Output);
@@ -104,7 +108,8 @@ namespace Forge.Services.Users
             try
             {
 
-                if (IsEmailTaken(user.Id, user.Email)){
+                if (IsEmailTaken(user.Id, user.Email))
+                {
                     return Errors.User.EmailTaken;
                 }
                 var parameters = new DynamicParameters();
@@ -120,6 +125,42 @@ namespace Forge.Services.Users
                 Debug.WriteLine(e);
             }
             return new UpsertedRecord(isNewlyCreated);
+        }
+
+        public ErrorOr<Updated> UpdateEmail(UpdateEmailRequest request)
+        {
+
+            if (IsEmailTaken(request.UserId, request.Email))
+            {
+                return Errors.User.EmailTaken;
+            }
+            string query = "UPDATE `user` set email = @Email where id = @id";
+            _dbConnection.Execute(query, new { Email = request.Email, Id = request.UserId });
+
+            return Result.Updated;
+        }
+
+        public ErrorOr<UpdatePasswordResponse> UpdatePassword(UpdatePasswordRequest request)
+        {
+            if (request.NewPassword != request.ConfirmNewPassword)
+            {
+                return Errors.User.PasswordsNotEqual;
+            }
+            bool Success = true;
+            string message = "Password updated successfully";
+            string query = "SELECT COUNT(*) FROM `user` WHERE id = @UserId AND password = @Password";
+
+            int result = _dbConnection.ExecuteScalar<int>(query, new { UserId = request.UserId, Password = request.CurrentPassword });
+            if (result == 1)
+            {
+                string updateQuery = "UPDATE `user` set password = @Password where id = @id";
+                _dbConnection.Execute(updateQuery, new { Password = request.NewPassword, Id = request.UserId });
+            }else{
+                Success = false;
+                message = "The current password is wrong";
+            }
+
+            return new UpdatePasswordResponse(Success, message);
         }
     }
 }

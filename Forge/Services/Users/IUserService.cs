@@ -1,4 +1,5 @@
 using ErrorOr;
+using Forge.Contracts.Users;
 using Forge.Models;
 
 namespace Forge.Services.Users
@@ -10,5 +11,8 @@ namespace Forge.Services.Users
         ErrorOr<User> GetUser(int id);
         ErrorOr<List<User>> GetUsers();
         ErrorOr<UpsertedRecord> UpsertUser(User user);
+        ErrorOr<Updated> UpdateEmail(UpdateEmailRequest request);
+        ErrorOr<UpdatePasswordResponse> UpdatePassword(UpdatePasswordRequest request);
+
     }
 }

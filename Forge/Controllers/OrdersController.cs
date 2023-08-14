@@ -28,7 +28,7 @@ namespace Forge.Controllers
         }
 
         [HttpGet()]
-        [Authorize(Policy = "Admin")]
+        [Authorize(Policy = "Orders")]
         public IActionResult GetOrders()
         {
             var ordersResult = _ordersService.Getorders();
@@ -40,7 +40,7 @@ namespace Forge.Controllers
         }
 
         [HttpPost("markasdelivered")]
-        [Authorize(Policy = "Admin")]
+        [Authorize(Policy = "Orders")]
         public IActionResult MarkAsDelivered(UpdateOrderRequest request)
         {
             var ordersResult = _ordersService.MarkAsDelivered(request);
@@ -52,7 +52,7 @@ namespace Forge.Controllers
         }
 
         [HttpPost("markasreceived")]
-        [Authorize(Policy = "Admin")]
+        [Authorize(Policy = "Orders")]
         public IActionResult MarkAsReceived(UpdateOrderRequest request)
         {
             var ordersResult = _ordersService.MarkAsReceived(request);

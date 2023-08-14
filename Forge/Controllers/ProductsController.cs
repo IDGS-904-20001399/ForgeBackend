@@ -21,7 +21,7 @@ namespace Forge.Controllers
         }
 
         [HttpPost]
-        [Authorize(Policy = "Admin")]
+        [Authorize(Policy = "Stocker")]
         public IActionResult CreateProduct(CreateProductRequest request)
         {
             ErrorOr<Product> requestToProductResult = Product.From(request);
@@ -66,7 +66,7 @@ namespace Forge.Controllers
 
 
         [HttpPut("{id:int}")]
-        [Authorize(Policy = "Admin")]
+        [Authorize(Policy = "Stocker")]
         public IActionResult UpsertProduct(int id, UpsertProductRequest request)
         {
             ErrorOr<Product> requestToProductResult = Product.From(id, request);
@@ -87,7 +87,7 @@ namespace Forge.Controllers
         }
 
         [HttpDelete("{id:int}")]
-        [Authorize(Policy = "Admin")]
+        [Authorize(Policy = "Stocker")]
         public IActionResult DeleteProduct(int id)
         {
             ErrorOr<Deleted> deleteProductResult = _productService.DeleteProduct(id);
@@ -98,7 +98,7 @@ namespace Forge.Controllers
         }
 
         [HttpPost("details/{id:int}")]
-        [Authorize(Policy = "Admin")]
+        [Authorize(Policy = "Stocker")]
         public IActionResult SetDetails(int id, DetailProductRequest request)
         {
             ErrorOr<ErrorOr.Created> DetailsResult = _productService.AddSupplies(request);
@@ -109,7 +109,7 @@ namespace Forge.Controllers
         }
 
         [HttpPost("make")]
-        [Authorize(Policy = "Admin")]
+        [Authorize(Policy = "Stocker")]
         public IActionResult Make(MakeProductRequest request)
         {
             ErrorOr<MakeProductResponse> makeResult = _productService.MakeProduct(request);
@@ -120,7 +120,7 @@ namespace Forge.Controllers
         }
 
         [HttpGet("details/{id:int}")]
-        [Authorize(Policy = "Admin")]
+        [Authorize(Policy = "Stocker")]
         public IActionResult GetDetails(int id)
         {
             ErrorOr<DetailProductResponse> DetailsResult = _productService.GetProductDetails(id);

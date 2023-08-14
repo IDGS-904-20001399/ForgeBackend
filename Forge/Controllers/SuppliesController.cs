@@ -23,7 +23,7 @@ namespace Forge.Controllers
         }
 
         [HttpPost]
-        [Authorize(Policy = "Admin")]
+        [Authorize(Policy = "Stocker")]
         public IActionResult CreateSupply(CreateSupplyRequest request)
         {
             ErrorOr<Supply> requestToSupplyResult = Supply.From(request);
@@ -45,7 +45,7 @@ namespace Forge.Controllers
 
 
         [HttpGet("{id:int}")]
-        [Authorize(Policy = "Admin")]
+        [Authorize(Policy = "Stocker")]
         public IActionResult GetSupply(int id)
         {
             ErrorOr<Supply> getSupplyResult = _supplyService.GetSupply(id);
@@ -56,7 +56,7 @@ namespace Forge.Controllers
         }
 
         [HttpGet()]
-        [Authorize(Policy = "Admin")]
+        [Authorize(Policy = "Stocker")]
         public IActionResult GetSupplies()
         {
             ErrorOr<List<Supply>> getSuppliesResult = _supplyService.GetSupplies();
@@ -68,7 +68,8 @@ namespace Forge.Controllers
 
 
         [HttpPut("{id:int}")]
-        [Authorize(Policy = "Admin")]
+        [Authorize(Policy = "Stocker")]
+ 
         public IActionResult UpsertSupply(int id, CreateSupplyRequest request)
         {
             ErrorOr<Supply> requestToSupplyResult = Supply.From(id, request);
@@ -89,7 +90,7 @@ namespace Forge.Controllers
         }
 
         [HttpDelete("{id:int}")]
-        [Authorize(Policy = "Admin")]
+        [Authorize(Policy = "Stocker")]
         public IActionResult DeleteSupply(int id)
         {
             ErrorOr<Deleted> deleteSupplyResult = _supplyService.DeleteSupply(id);
@@ -100,7 +101,7 @@ namespace Forge.Controllers
         }
 
         [HttpPost("buy")]
-        [Authorize(Policy = "Admin")]
+        [Authorize(Policy = "Stocker")]
         public IActionResult SetDetails(BuySupplyRequest request)
         {
             ErrorOr<ErrorOr.Created> BuyResult = _supplyService.BuySupply(request);

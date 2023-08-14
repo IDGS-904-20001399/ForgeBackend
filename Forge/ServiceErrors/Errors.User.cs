@@ -10,6 +10,11 @@ namespace Forge.ServiceErrors
                 description: $"El correo proporcionado ya se encuentra en uso"
             );
 
+            public static Error PasswordsNotEqual => Error.Validation(
+                code: "User.PasswordsNotEqual",
+                description: $"Las contraseñas no son iguales"
+            );
+
         }
     }
 }
