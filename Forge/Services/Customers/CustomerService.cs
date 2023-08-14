@@ -151,7 +151,8 @@ namespace Forge.Services.Customers
         {
             try
             {
-                if(IsEmailTaken(0, customer.Email)){
+                if (IsEmailTaken(0, customer.Email))
+                {
                     return Errors.User.EmailTaken;
                 }
 
@@ -182,13 +183,35 @@ namespace Forge.Services.Customers
         public ErrorOr<List<OrdersResponse>> GetOrders(OrderRequest request)
         {
             string orderQuery = "SELECT o.*, (SELECT SUM(quantity * price) FROM order_details WHERE order_id = o.id) subtotal, (SELECT subtotal + delivery_fee) total FROM `order` o WHERE user_id = @Id;";
-            var Orders = _dbConnection.Query<OrdersResponse>(orderQuery, new {Id = request.CustomerId}).ToList();
-            foreach(var order in Orders){
+            var Orders = _dbConnection.Query<OrdersResponse>(orderQuery, new { Id = request.CustomerId }).ToList();
+            foreach (var order in Orders)
+            {
                 string detailsQuery = "SELECT od.*, (SELECT name from product where id = od.product_id) productName FROM `order_details` od where od.id = @Id; ";
-                order.Details = _dbConnection.Query<OrderDetailResponse>(detailsQuery, new {Id = order.Id}).ToList();
+                order.Details = _dbConnection.Query<OrderDetailResponse>(detailsQuery, new { Id = order.Id }).ToList();
             }
 
             return Orders;
+        }
+
+        public ErrorOr<Updated> UpdateCustomerdata(UpdateDataRequest request)
+        {
+            if (IsEmailTaken(request.UserId, request.Email))
+            {
+                return Errors.User.EmailTaken;
+            }
+            var parameters = new
+            {
+                UserId = request.UserId,
+                Names = request.Names,
+                Lastnames = request.Lastnames,
+                Address = request.Address,
+                Phone = request.Phone,
+                Email = request.Email
+            };
+
+            _dbConnection.Execute("UpdateCustomer", parameters, commandType: CommandType.StoredProcedure);
+
+            return Result.Updated;
         }
     }
 }

@@ -65,6 +65,19 @@ namespace Forge.Controllers
 
         }
 
+        [HttpPost("updatedata")]
+        [Authorize(Policy = "Customer")]
+        public IActionResult UpdateData(UpdateDataRequest request)
+        {
+            var ordersResult = _customerService.UpdateCustomerdata(request);
+
+            return ordersResult.Match(
+                Response => NoContent(),
+                errors => Problem(errors)
+            );
+
+        }
+
         private static CustomerResponse MapCustomerResponse(Customer customer)
         {
             return new CustomerResponse(
