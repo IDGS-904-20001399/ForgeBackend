@@ -5,6 +5,7 @@ namespace Forge.Contracts.Users
         string Token,
         string Message,
         string Name, 
-        string Role
+        string Role,
+        int Id
     );
 }

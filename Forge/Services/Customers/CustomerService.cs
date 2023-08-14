@@ -53,7 +53,7 @@ namespace Forge.Services.Customers
                 parameters.Add("InsertedId", dbType: DbType.Int32, direction: ParameterDirection.Output);
                 parameters.Add("Payment", $"Card {MaskString(request.Card.CardNumber)}");
                 parameters.Add("DeliveryFee", DeliveryFee);
-                parameters.Add("Status", "Created");
+                parameters.Add("Status", "Pedido");
                 parameters.Add("DateValue", DateTime.Now);
                 parameters.Add("UserId", request.CustomerId);
 
@@ -139,10 +139,21 @@ namespace Forge.Services.Customers
 
             return dictionary;
         }
+
+        public bool IsEmailTaken(int userId, string email)
+        {
+            string query = "SELECT COUNT(*) FROM user WHERE email = @Email AND id <> @Id";
+            int count = _dbConnection.QuerySingle<int>(query, new { Email = email, Id = userId });
+
+            return count > 0;
+        }
         public ErrorOr<Created> CreateCustomer(Customer customer)
         {
             try
             {
+                if(IsEmailTaken(0, customer.Email)){
+                    return Errors.User.EmailTaken;
+                }
 
                 var parameters = new DynamicParameters();
                 parameters.AddDynamicParams(customer);

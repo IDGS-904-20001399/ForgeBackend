@@ -22,6 +22,9 @@ namespace Forge.Services.Users
         {
             try
             {
+                if (IsEmailTaken(0, user.Email)){
+                    return Errors.User.EmailTaken;
+                }
                 var parameters = new DynamicParameters();
                 parameters.AddDynamicParams(user);
                 parameters.Add("Id", dbType: DbType.Int32, direction: ParameterDirection.Output);
@@ -35,6 +38,14 @@ namespace Forge.Services.Users
                 Debug.WriteLine(e);
             }
             return Result.Created;
+        }
+
+        public bool IsEmailTaken(int userId, string email)
+        {
+            string query = "SELECT COUNT(*) FROM user WHERE email = @Email AND id <> @Id";
+            int count = _dbConnection.QuerySingle<int>(query, new { Email = email, Id = userId });
+
+            return count > 0;
         }
 
         public ErrorOr<Deleted> DeleteUser(int id)
@@ -59,7 +70,8 @@ namespace Forge.Services.Users
             {
                 string query = "SELECT u.*, (SELECT role_id from roles_users where user_id = u.id) role_id, (SELECT name FROM role r where r.id = role_id ) role FROM user u WHERE u.id = 1 AND u.status = 1";
                 User user = _dbConnection.QueryFirstOrDefault<User>(query, new { Id = id });
-                if (user != null){
+                if (user != null)
+                {
                     return user;
                 }
             }
@@ -91,6 +103,10 @@ namespace Forge.Services.Users
             bool isNewlyCreated = false;
             try
             {
+
+                if (IsEmailTaken(user.Id, user.Email)){
+                    return Errors.User.EmailTaken;
+                }
                 var parameters = new DynamicParameters();
                 parameters.AddDynamicParams(user);
                 parameters.Add("Created", dbType: DbType.Int32, direction: ParameterDirection.Output);

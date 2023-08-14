@@ -4,6 +4,7 @@ using System.Security.Cryptography;
 using System.Text;
 using Forge.Services.Customers;
 using Forge.Services.Login;
+using Forge.Services.Orders;
 using Forge.Services.Products;
 using Forge.Services.Suppliers;
 using Forge.Services.Supplies;
@@ -21,6 +22,7 @@ var builder = WebApplication.CreateBuilder(args);
     builder.Services.AddScoped<IUserService, UserService>();
     builder.Services.AddScoped<ISupplierService, SupplierService>();
     builder.Services.AddScoped<ICustomerService, CustomerService>();
+    builder.Services.AddScoped<IOrdersService, OrderService>();
     builder.Services.AddTransient<MySqlConnection>((sp) =>
         {
             var configuration = sp.GetRequiredService<IConfiguration>();

@@ -32,6 +32,7 @@ namespace Forge.Services.Login
                 string name = "";
                 string token = "";
                 string role = "";
+                int id = 0;
 
                 string query = "SELECT count(*) FROM user WHERE email = @Email";
                 int nUsers = _dbConnection.QueryFirstOrDefault<int>(query, new { request.Email });
@@ -41,6 +42,7 @@ namespace Forge.Services.Login
                     var user = _dbConnection.QueryFirstOrDefault<dynamic>(authenticationQuery, new { request.Email, request.Password });
                     if (user != null)
                     {
+                        id = user.id;
                         string rolesQuery = "SELECT name from role where id = (select role_id from roles_users where user_id = @Id)";
                         var roles = _dbConnection.Query<string>(rolesQuery, new { user.id }).ToList();
                         role = roles[0];
@@ -54,7 +56,7 @@ namespace Forge.Services.Login
                         message = "The password is wrong please try again.";
                     }
                 }
-                return new LoginResponse(authenticated, token, message, name, role);
+                return new LoginResponse(authenticated, token, message, name, role, id);
             }
             catch (Exception e)
             {
