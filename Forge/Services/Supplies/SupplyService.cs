@@ -24,16 +24,17 @@ namespace Forge.Services.Supplies
             // Delete existing rows
             string supplyQuery = "SELECT * FROM supply WHERE id = @Id";
 
-            var supply = _dbConnection.QueryFirstOrDefault<dynamic>(supplyQuery, new {Id = request.SupplyId});
+            var supply = _dbConnection.QueryFirstOrDefault<dynamic>(supplyQuery, new { Id = request.SupplyId });
 
-            if (supply != null){
-                 var parameters = new
+            if (supply != null)
+            {
+                var parameters = new
                 {
                     BuyDate = DateTime.Now,
                     Quantity = request.Quantity,
                     AvailableUseQuantity = request.Quantity * supply.equivalence,
                     UnitCost = supply.cost,
-                    SupplyId = request.SupplyId 
+                    SupplyId = request.SupplyId
                 };
 
                 // Call the stored procedure using Dapper
@@ -79,6 +80,31 @@ namespace Forge.Services.Supplies
             return Result.Deleted;
         }
 
+        public ErrorOr<DetailSupplyResponse> GetDetails(int id)
+        {
+            string query = @"
+            SELECT s.*,
+    (SELECT SUM(available_use_quantity) FROM supply_buys WHERE supply_id = s.id) AS StockInUseUnit,
+    (SELECT SUM(available_use_quantity) FROM supply_buys WHERE supply_id = s.id) / s.equivalence AS stock,
+    CASE
+        WHEN ((SELECT SUM(available_use_quantity) FROM supply_buys WHERE supply_id = s.id) / s.equivalence) IS NULL OR ((SELECT SUM(available_use_quantity) FROM supply_buys WHERE supply_id = s.id) / s.equivalence) = 0 THEN 'Sin inventario'
+        WHEN ((SELECT SUM(available_use_quantity) FROM supply_buys WHERE supply_id = s.id) / s.equivalence) >= 1 AND ((SELECT SUM(available_use_quantity) FROM supply_buys WHERE supply_id = s.id) / s.equivalence) <= 10 THEN 'Poco inventario'
+        ELSE 'En inventario'
+    END AS inventory_status
+FROM supply s
+WHERE s.id = @SupplyId;";
+
+            DetailSupplyResponse response = _dbConnection.QueryFirstOrDefault<DetailSupplyResponse>(query, new { SupplyId = id });
+
+            string buysQuery = "SELECT * FROM supply_buys where supply_id = @Id";
+            response.Buys = _dbConnection.Query<SupplyBuyResponse>(buysQuery, new { Id = id }).ToList();
+
+            string inventarioQuery = "SELECT * FROM supply_buys where supply_id = @Id AND available_use_quantity > 0";
+            response.Inventory = _dbConnection.Query<SupplyBuyResponse>(inventarioQuery, new { Id = id }).ToList();
+
+            return response;
+        }
+
         public ErrorOr<List<Supply>> GetSupplies()
         {
             try
@@ -100,7 +126,8 @@ namespace Forge.Services.Supplies
             {
                 string query = "SELECT * FROM supply WHERE id = @Id AND status = 1";
                 Supply supply = _dbConnection.QueryFirstOrDefault<Supply>(query, new { Id = id });
-                if (supply != null){
+                if (supply != null)
+                {
                     return supply;
                 }
             }

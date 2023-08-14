@@ -13,5 +13,6 @@ namespace Forge.Services.Supplies
         ErrorOr<List<Supply>> GetSupplies();
         ErrorOr<UpsertedSuply> UpsertSupply(Supply supply);
         ErrorOr<Created> BuySupply(BuySupplyRequest request);
+        ErrorOr<DetailSupplyResponse> GetDetails(int id);
     }
 }

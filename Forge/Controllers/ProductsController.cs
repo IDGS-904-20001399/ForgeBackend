@@ -152,7 +152,8 @@ namespace Forge.Controllers
                 product.Category,
                 product.Price,
                 product.Image,
-                product.Stock
+                product.Stock,
+                product.InventoryStatus
             );
         }
         private IActionResult CreatedAtGetProduct(Product product)

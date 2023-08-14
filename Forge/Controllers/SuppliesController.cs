@@ -111,6 +111,17 @@ namespace Forge.Controllers
             );
         }
 
+        [HttpGet("details/{id:int}")]
+        [Authorize(Policy = "Stocker")]
+        public IActionResult GetDetails(int id)
+        {
+            ErrorOr<Contracts.Supplies.DetailSupplyResponse> DetailsResult = _supplyService.GetDetails(id);
+            return DetailsResult.Match(
+                Details => Ok(Details),
+                errors => Problem(errors)
+            );
+        }
+
         private static List<SupplyResponse> MapSuppliesResponses(List<Supply> supplies)
         {
             List<SupplyResponse> responses = new List<SupplyResponse>();

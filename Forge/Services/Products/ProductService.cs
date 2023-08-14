@@ -6,6 +6,8 @@ using MySql.Data.MySqlClient;
 using Dapper;
 using System.Diagnostics;
 using Forge.Contracts.Products;
+using Forge.Contracts.Supplies;
+using DetailSupplyResponse = Forge.Contracts.Products.DetailSupplyResponse;
 
 namespace Forge.Services.Products
 {
@@ -57,7 +59,7 @@ namespace Forge.Services.Products
         {
             try
             {
-                string query = "SELECT p.*, (SELECT SUM(available_quantity) from product_inventory WHERE product_id = p.id) stock FROM `product` p WHERE status = 1 and p.id = @Id";
+                string query = "SELECT p.*, (SELECT SUM(available_quantity) FROM product_inventory WHERE product_id = p.id) stock, CASE WHEN (SELECT SUM(available_quantity) FROM product_inventory WHERE product_id = p.id) IS NULL OR (SELECT SUM(available_quantity) FROM product_inventory WHERE product_id = p.id) = 0 THEN 'Sin inventario' WHEN (SELECT SUM(available_quantity) FROM product_inventory WHERE product_id = p.id) BETWEEN 1 AND 10 THEN 'Poco inventario' ELSE 'En inventario' END AS inventory_status FROM `product` p WHERE status = 1 AND p.id = @Id";
                 Product product = _dbConnection.QueryFirstOrDefault<Product>(query, new { Id = id });
                 if (product != null)
                 {
@@ -76,7 +78,7 @@ namespace Forge.Services.Products
         {
             try
             {
-                string query = "SELECT p.*, (SELECT SUM(available_quantity) from product_inventory WHERE product_id = p.id) stock FROM `product` p WHERE status = 1;";
+                string query = "SELECT p.*, (SELECT SUM(available_quantity) FROM product_inventory WHERE product_id = p.id) stock, CASE WHEN (SELECT SUM(available_quantity) FROM product_inventory WHERE product_id = p.id) IS NULL OR (SELECT SUM(available_quantity) FROM product_inventory WHERE product_id = p.id) = 0 THEN 'Sin inventario' WHEN (SELECT SUM(available_quantity) FROM product_inventory WHERE product_id = p.id) BETWEEN 1 AND 10 THEN 'Poco inventario' ELSE 'En inventario' END AS inventory_status FROM `product` p WHERE status = 1";
                 return _dbConnection.Query<Product>(query).ToList();
             }
             catch (Exception e)
@@ -133,8 +135,23 @@ namespace Forge.Services.Products
             string otherSuppliesQuery = "SELECT s.* from supply s where s.id not in (select supply_id from product_supplies where product_id = @Id)";
             List<DetailSupplyResponse> otherSupplies = _dbConnection.Query<DetailSupplyResponse>(otherSuppliesQuery, new { Id = id }).ToList();
 
+            string MakesQuery = "SELECT pi.*, (SELECT unit_cost * quantity) totalCost " +
+                         "FROM product_inventory pi " +
+                         "WHERE product_id = @ProductId";
 
-            return new DetailProductResponse(id, productSupplies, otherSupplies);
+            var makes = _dbConnection.Query<InventoryResponse>(MakesQuery, new { ProductId = id }).ToList();
+
+            string InventoryQuery = "SELECT pi.*, (SELECT unit_cost * quantity) totalCost " +
+                         "FROM product_inventory pi " +
+                         "WHERE product_id = @ProductId AND available_quantity > 0";
+
+            var inventory = _dbConnection.Query<InventoryResponse>(InventoryQuery, new { ProductId = id }).ToList();
+
+
+
+
+
+            return new DetailProductResponse(id, productSupplies, otherSupplies, inventory, makes);
         }
 
         public ErrorOr<MakeProductResponse> MakeProduct(MakeProductRequest request)

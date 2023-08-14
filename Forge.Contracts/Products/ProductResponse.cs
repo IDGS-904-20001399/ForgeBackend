@@ -16,6 +16,7 @@ namespace Forge.Contracts.Products
         string Category,
         double Price,
         string Image,
-        int Stock
+        int Stock,
+        string InventoryStatus
         );
 }
