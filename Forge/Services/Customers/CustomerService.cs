@@ -216,7 +216,7 @@ namespace Forge.Services.Customers
 
         public ErrorOr<Customer> GetCustomer(int id)
         {
-            return _dbConnection.QueryFirstOrDefault<Customer>("SELECT c.*, (SELECT email from `user` where id = c.user_id) email FROM customer c WHERE status = 1 AND id = @Id", new {Id = id});
+            return _dbConnection.QueryFirstOrDefault<Customer>("SELECT u.email, c.* FROM `user` u  inner join customer c on user_id = u.id WHERE u.id = @Id", new {Id = id});
         }
     }
 }
