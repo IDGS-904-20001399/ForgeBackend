@@ -9,6 +9,8 @@ namespace Forge.Contracts.Dashboard
         public int Month { get; set; }
         public int Quantity { get; set; }
         public float Price { get; set; }
+        public int TotalQuantity{get; set;}
+        public float TotalPrice { get; set; }
 
         public CustomerSummary()
         {

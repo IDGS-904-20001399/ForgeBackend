@@ -27,6 +27,13 @@ namespace Forge.Services.Dashboard
             return result;
         }
 
+        public List<CustomerSummary> GetCustomerSummariesTotal()
+        {
+            string query = "SELECT cs.*, (SELECT SUM(quantity) from customer_summary where id = cs.id) totalQuantity, (SELECT SUM(price) from customer_summary where id = cs.id) totalPrice FROM customer_summary cs group by cs.user_id";
+            var result = _dbConnection.Query<CustomerSummary>(query).ToList();
+            return result;
+        }
+
         public List<MonthlyProductSold> GetMonthlyProductSolds()
         {
             return _dbConnection.Query<MonthlyProductSold>("SELECT * FROM monthly_products_sold").ToList();

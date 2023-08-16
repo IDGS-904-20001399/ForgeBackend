@@ -5,6 +5,11 @@ Authorization: Bearer {{token}}
 
 ###
 
+GET   http://localhost:5088/api/dashboard/customersummarytotal
+Authorization: Bearer {{token}}
+
+###
+
 GET   http://localhost:5088/api/dashboard/monthlyproductsolds
 Authorization: Bearer {{token}}
 
