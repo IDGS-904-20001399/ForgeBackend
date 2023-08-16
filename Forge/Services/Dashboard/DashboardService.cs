@@ -50,6 +50,12 @@ namespace Forge.Services.Dashboard
             return productsSold;
         }
 
+        public List<ProductSold> GetProductsSoldTotal()
+        {
+            var productsSold = _dbConnection.Query<ProductSold>("SELECT ps.*, (SELECT SUM(units_sold) from products_sold where id = ps.id) totalUnitsSold, (SELECT SUM(earnings) from products_sold where id = ps.id) totalEarnings  FROM products_sold ps group by ps.product_id").ToList();
+            return productsSold;
+        }
+
         public List<ProductSummary> GetProductSummaries()
         {
             return _dbConnection.Query<ProductSummary>("SELECT * FROM product_summary").ToList();

@@ -56,6 +56,13 @@ namespace Forge.Controllers
             return Ok(_dashboardService.GetProductsSold());
         }
 
+        [HttpGet("productssoldtotal")]
+        [Authorize(Policy = "Orders")]
+        public IActionResult GetProductSoldTotal()
+        {
+            return Ok(_dashboardService.GetProductsSoldTotal());
+        }
+
         [HttpGet("productinventory")]
         [Authorize(Policy = "Orders")]
         public IActionResult GetProductInventory()

@@ -10,6 +10,7 @@ namespace Forge.Services.Dashboard
         List<ProductSummary> GetProductSummaries();
         List<ProductInventory> GetProductInventory();
         List<ProductSold> GetProductsSold();
+        List<ProductSold> GetProductsSoldTotal();
         List<MonthlyProductSold> GetMonthlyProductSolds();
         List<CustomerSummary> GetCustomerSummaries();
         List<CustomerSummary> GetCustomerSummariesTotal();

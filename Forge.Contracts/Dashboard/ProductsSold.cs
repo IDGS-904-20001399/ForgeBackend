@@ -10,6 +10,9 @@ namespace Forge.Contracts.Dashboard
         public int UnitsSold { get; set; }
         public float Earnings { get; set; }
 
+        public int TotalUnitsSold{get; set;}
+        public float TotalEarnings{get; set;}
+
         public ProductSold() { }
     }
 }

@@ -20,6 +20,11 @@ Authorization: Bearer {{token}}
 
 ###
 
+GET   http://localhost:5088/api/dashboard/productssoldtotal
+Authorization: Bearer {{token}}
+
+###
+
 GET   http://localhost:5088/api/dashboard/productinventory
 Authorization: Bearer {{token}}
 
