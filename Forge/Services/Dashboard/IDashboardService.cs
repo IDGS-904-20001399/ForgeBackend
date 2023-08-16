@@ -7,6 +7,7 @@ namespace Forge.Services.Dashboard
         List<SupplySummary> GetSupplySummary();
         List<SupplyItem> GetSupplyInventory();
         List<Statistics> GetStatistics();
+        List<StatisticsSummary> GetStatisticsSummary();
         List<ProductSummary> GetProductSummaries();
         List<ProductInventory> GetProductInventory();
         List<ProductSold> GetProductsSold();

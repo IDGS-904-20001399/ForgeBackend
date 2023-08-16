@@ -66,6 +66,18 @@ namespace Forge.Services.Dashboard
             return _dbConnection.Query<Statistics>("SELECT * FROM statistics").ToList();
         }
 
+        public List<StatisticsSummary> GetStatisticsSummary()
+        {
+             var query = @"
+                SELECT 
+                    SUM(egress) totalEgress,
+                    SUM(income) totalIncome,
+                    (SELECT SUM(profits) FROM statistics) totalProfits
+                FROM statistics";
+
+            return _dbConnection.Query<StatisticsSummary>(query).ToList();
+        }
+
         public List<SupplyItem> GetSupplyInventory()
         {
             return _dbConnection.Query<SupplyItem>("SELECT * FROM supply_inventory").ToList();

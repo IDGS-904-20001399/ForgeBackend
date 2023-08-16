@@ -40,6 +40,11 @@ Authorization: Bearer {{token}}
 
 ###
 
+GET   http://localhost:5088/api/dashboard/statisticstotal
+Authorization: Bearer {{token}}
+
+###
+
 GET   http://localhost:5088/api/dashboard/suplyinventory
 Authorization: Bearer {{token}}
 
