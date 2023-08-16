@@ -81,6 +81,18 @@ namespace Forge.Controllers
                 Response => NoContent(),
                 errors => Problem(errors)
             );
+        }
+
+        [HttpGet("{id:int}")]
+        [Authorize(Policy = "Customer")]
+        public IActionResult GetCustomer(int id)
+        {
+            var customerResult = _customerService.GetCustomer(id);
+
+            return customerResult.Match(
+                Customer => Ok(MapCustomerResponse(Customer)),
+                errors => Problem(errors)
+            );
 
         }
 

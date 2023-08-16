@@ -10,5 +10,6 @@ namespace Forge.Services.Customers
         ErrorOr<Created> CreateCustomer(Customer customer);
         ErrorOr<List<OrdersResponse>> GetOrders(OrderRequest request);
         ErrorOr<Updated> UpdateCustomerdata(UpdateDataRequest request);
+        ErrorOr<Customer> GetCustomer(int id);
     }
 }
