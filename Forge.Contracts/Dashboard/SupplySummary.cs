@@ -7,6 +7,8 @@ public class SupplySummary
     public int Month { get; set; }
     public int QuantityBought { get; set; }
     public float Percentage { get; set; }
+    public int TotalQuantityBought { get; set; }
+    public float TotalPercentage { get; set; }
 
     public SupplySummary()
     {

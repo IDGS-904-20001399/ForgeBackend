@@ -53,4 +53,9 @@ Authorization: Bearer {{token}}
 GET   http://localhost:5088/api/dashboard/supplysummary
 Authorization: Bearer {{token}}
 
+###
+
+GET   http://localhost:5088/api/dashboard/supplysummarytotal
+Authorization: Bearer {{token}}
+
 

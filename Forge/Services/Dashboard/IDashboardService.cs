@@ -5,6 +5,7 @@ namespace Forge.Services.Dashboard
     public interface IDashboardService
     {
         List<SupplySummary> GetSupplySummary();
+        List<SupplySummary> GetSupplySummaryTotal();
         List<SupplyItem> GetSupplyInventory();
         List<Statistics> GetStatistics();
         List<StatisticsSummary> GetStatisticsSummary();

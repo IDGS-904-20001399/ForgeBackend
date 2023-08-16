@@ -88,5 +88,11 @@ namespace Forge.Services.Dashboard
             string query = "SELECT * FROM supply_summary";
             return _dbConnection.Query<SupplySummary>(query).ToList();
         }
+
+        public List<SupplySummary> GetSupplySummaryTotal()
+        {
+            string query = "SELECT ss.*, (SELECT SUM(quantity_bought) from supply_summary where id = ss.id) TotalQuantityBought, (SELECT SUM(percentage) from supply_summary where id = ss.id) TotalPercentage FROM supply_summary ss group by supply_id";
+            return _dbConnection.Query<SupplySummary>(query).ToList();
+        }
     }
 }
