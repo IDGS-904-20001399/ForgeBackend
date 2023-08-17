@@ -61,6 +61,15 @@ var builder = WebApplication.CreateBuilder(args);
             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey))
         };
     });
+    builder.Services.AddCors(options =>
+    {
+        options.AddDefaultPolicy(builder =>
+        {
+            builder.AllowAnyOrigin()
+                   .AllowAnyMethod()
+                   .AllowAnyHeader();
+        });
+    });
     // Add services to the container.
 
     // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -85,6 +94,7 @@ var app = builder.Build();
 
     app.MapControllers();
     Dapper.DefaultTypeMap.MatchNamesWithUnderscores = true;
+    app.UseCors();
 
     app.Run();
 }

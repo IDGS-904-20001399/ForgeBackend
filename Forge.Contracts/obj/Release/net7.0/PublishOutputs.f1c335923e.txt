@@ -1,0 +1,3 @@
+C:\Users\Kasparov\Desktop\dev\univ\Forge\Forge.Contracts\bin\Release\net7.0\publish\Forge.Contracts.dll
+C:\Users\Kasparov\Desktop\dev\univ\Forge\Forge.Contracts\bin\Release\net7.0\publish\Forge.Contracts.deps.json
+C:\Users\Kasparov\Desktop\dev\univ\Forge\Forge.Contracts\bin\Release\net7.0\publish\Forge.Contracts.pdb

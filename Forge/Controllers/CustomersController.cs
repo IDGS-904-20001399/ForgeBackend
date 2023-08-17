@@ -52,7 +52,7 @@ namespace Forge.Controllers
             ErrorOr<ErrorOr.Created> createCustomerResult = _customerService.CreateCustomer(customer);
 
             return createCustomerResult.Match(
-                created => Ok(MapCustomerResponse(customer)),
+                created => Ok(request),
                 errors => Problem(errors)
             );
         }
